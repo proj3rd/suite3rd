@@ -1,0 +1,23 @@
+{
+  "name": "lib3rd",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://somidad@github.com/proj3rd/lib3rd-new.git"
+  },
+  "keywords": [],
+  "author": "Seokseong Jeon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/proj3rd/lib3rd-new/issues"
+  },
+  "homepage": "https://github.com/proj3rd/lib3rd-new#readme",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}
