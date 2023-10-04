@@ -75,4 +75,5 @@ export async function getSpec(
     `Downloaded spec ${specNumber} of release ${release} in ${date}.`
   );
   client.close();
+  return latest.name;
 }
