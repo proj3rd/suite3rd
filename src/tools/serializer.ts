@@ -2,11 +2,14 @@
 // Adjust path to wordconv.exe
 const WORDCONV_PATH = "C:\\Program Files\\Microsoft Office\\root\\Office16";
 
-import { createReadStream, readFileSync, readdirSync } from "fs";
+import { createReadStream, readFileSync, readdirSync, writeFileSync } from "fs";
 import { Extract } from "unzipper";
 import { z } from "zod";
 import { getSpec } from "../std/repo";
 import { exec } from "child_process";
+import WordExtractor from "word-extractor";
+import { extract } from "../asn1/extractor";
+import { normalize, parse } from "lib3rd/dist/asn1";
 
 const SpecNumber = z.string();
 const Release = z.coerce.number().int().positive();
@@ -16,6 +19,8 @@ const Input = z.tuple([SpecNumber, Release, YearMonth, Type]);
 const InputList = z.array(Input);
 
 async function serialize() {
+  const extractor = new WordExtractor();
+
   // Input line format: specNumber release yyyy-mm type, e.g.:
   // 36.331 16 2022-09 asn1
   // 36.413 16 2022-09 both
@@ -57,6 +62,8 @@ async function serialize() {
 
     // Convert
     const docxFile = docFile.replace(/doc$/, "docx");
+    const asn1File = docxFile.replace("docx", "asn1.json");
+    const tabularfile = docxFile.replace("docx", "tabular.json");
     if (docFile !== docxFile) {
       exec(
         [
@@ -71,7 +78,16 @@ async function serialize() {
 
     if (type === "asn1" || type === "both") {
       // Extract
+      const doc = await extractor.extract(`${extractDir}/${docxFile}`);
+      const text = doc.getBody();
+      const extracted = await extract(text, {
+        excludeNonTagComment: true,
+      });
+      // Parse
+      const parsed = parse(normalize(extracted));
       // Serialize
+      const serialized = JSON.stringify(parsed);
+      writeFileSync(`${extractDir}/${asn1File}`, serialized);
     }
     if (type === "tabular" || type === "both") {
       // Serialize
