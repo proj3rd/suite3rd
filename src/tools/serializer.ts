@@ -1,3 +1,4 @@
+// https://gist.github.com/commonquail/6084444fe418b422c286
 // Adjust path to wordconv.exe
 const WORDCONV_PATH = "C:\\Program Files\\Microsoft Office\\root\\Office16";
 
