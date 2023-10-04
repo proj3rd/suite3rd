@@ -69,10 +69,12 @@ async function serialize() {
       );
     }
 
-    // Serialize
     if (type === "asn1" || type === "both") {
+      // Extract
+      // Serialize
     }
     if (type === "tabular" || type === "both") {
+      // Serialize
     }
   }
 }
