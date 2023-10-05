@@ -10,6 +10,7 @@ export function getSeries(specNumber: string): string | undefined {
   return specNumber.substring(0, index);
 }
 
+// https://www.3gpp.org/specifications-technologies/specifications-by-series/file-name-conventions
 export function versionFromString(str: string) {
   function numberFromChar(char: string) {
     const coerced = Number(char);
