@@ -9,3 +9,23 @@ export function getSeries(specNumber: string): string | undefined {
   }
   return specNumber.substring(0, index);
 }
+
+export function versionFromString(str: string) {
+  function numberFromChar(char: string) {
+    const coerced = Number(char);
+    if (Number.isInteger(coerced)) {
+      return coerced;
+    }
+    const chars = "0123456789abcdefghijklmnopqrstuvwxyz";
+    return chars.indexOf(char);
+  }
+
+  const step = str.length / 3;
+  if (step !== 1 && step !== 2) {
+    return undefined;
+  }
+
+  return [0, 1, 2]
+    .map((pos) => str.substring(pos * step, (pos + 1) * step))
+    .map(numberFromChar);
+}
