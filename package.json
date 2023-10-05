@@ -31,6 +31,9 @@
     "basic-ftp": "^5.0.3",
     "commander": "^11.0.0",
     "lib3rd": "github:proj3rd/lib3rd",
+    "number3rd": "github:proj3rd/number3rd",
+    "tabular3rd": "github:proj3rd/tabular3rd#v1.0.1",
+    "tabular3rd-lint": "github:proj3rd/tabular3rd-lint",
     "unzipper": "^0.10.14",
     "word-extractor": "^1.0.4",
     "zod": "^3.22.3"
