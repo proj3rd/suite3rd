@@ -62,8 +62,6 @@ async function serialize() {
 
     // Convert
     const docxFile = docFile.replace(/doc$/, "docx");
-    const asn1File = docxFile.replace("docx", "asn1.json");
-    const tabularfile = docxFile.replace("docx", "tabular.json");
     if (docFile !== docxFile) {
       exec(
         [
@@ -77,6 +75,7 @@ async function serialize() {
     }
 
     if (type === "asn1" || type === "both") {
+      const asn1File = docxFile.replace("docx", "asn1.json");
       // Extract
       const doc = await extractor.extract(`${extractDir}/${docxFile}`);
       const text = doc.getBody();
@@ -90,6 +89,7 @@ async function serialize() {
       writeFileSync(`${extractDir}/${asn1File}`, serialized);
     }
     if (type === "tabular" || type === "both") {
+      const tabularfile = docxFile.replace("docx", "tabular.json");
       // Serialize
     }
   }
