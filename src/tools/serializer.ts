@@ -9,7 +9,8 @@ import { getSpec } from "../std/repo";
 import { exec } from "child_process";
 import WordExtractor from "word-extractor";
 import { extract } from "../asn1/extractor";
-import { normalize, parse } from "lib3rd/dist/asn1";
+import { normalize, parse as parseAsn1 } from "lib3rd/dist/asn1";
+import { parse as parseTabular } from "tabular3rd";
 
 const SpecNumber = z.string();
 const Release = z.coerce.number().int().positive();
@@ -83,7 +84,7 @@ async function serialize() {
         excludeNonTagComment: true,
       });
       // Parse
-      const parsed = parse(normalize(extracted));
+      const parsed = parseAsn1(normalize(extracted));
       // Serialize
       const serialized = JSON.stringify(parsed);
       writeFileSync(`${extractDir}/${asn1File}`, serialized);
@@ -91,6 +92,9 @@ async function serialize() {
     if (type === "tabular" || type === "both") {
       const tabularfile = docxFile.replace("docx", "tabular.json");
       // Serialize
+      const content = readFileSync(`${extractDir}/${docxFile}`);
+      const parsed = parseTabular(content);
+      // Lint
     }
   }
 }
