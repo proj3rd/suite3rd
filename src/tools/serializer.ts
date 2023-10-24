@@ -11,6 +11,9 @@ import WordExtractor from "word-extractor";
 import { extract } from "../asn1/extractor";
 import { normalize, parse as parseAsn1 } from "lib3rd/dist/asn1";
 import { parse as parseTabular } from "tabular3rd";
+import { parse } from "path";
+import { fromString } from "../std/version";
+import { testCases } from "tabular3rd-lint";
 
 const SpecNumber = z.string();
 const Release = z.coerce.number().int().positive();
@@ -93,8 +96,19 @@ async function serialize() {
       const tabularfile = docxFile.replace("docx", "tabular.json");
       // Serialize
       const content = readFileSync(`${extractDir}/${docxFile}`);
-      const parsed = parseTabular(content);
+      const parsed = await parseTabular(content);
       // Lint
+      const { name } = parse(docxFile);
+      const [specNumber, ...remainder] = name.split("-");
+      const versionString = remainder.join("");
+      const version = fromString(versionString)?.join(".");
+      if (specNumber && version) {
+        testCases.forEach((testCase) => {
+          testCase(parsed, specNumber, version);
+        });
+      }
+      const serialized = JSON.stringify(parsed);
+      writeFileSync(`${extractDir}/${tabularfile}`, serialized);
     }
   }
 }
