@@ -23,7 +23,8 @@ export function setExtractCommand(program: Command) {
 
       const delimiters = selectDelimiters(content);
       if (!delimiters) {
-        throw Error(`Cannot select ASN.1 delimiters for ${path}. Exit.`);
+        console.error(`Cannot select ASN.1 delimiters for ${path}. Exit.`);
+        return;
       }
       const { Starter, Terminator } = delimiters;
 
