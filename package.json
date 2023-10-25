@@ -1,0 +1,20 @@
+{
+  "name": "suite3rd",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "scripts": {
+    "build:esm": "npx tsc -p tsconfig.esm.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
