@@ -10,6 +10,7 @@
   },
   "bin": "./dist/esm/bin.js",
   "scripts": {
+    "cli": "node ./dist/esm/bin.js",
     "build:esm": "npx tsc -p tsconfig.esm.json"
   },
   "keywords": [],
