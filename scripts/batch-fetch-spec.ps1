@@ -1,0 +1,16 @@
+npm run cli 3gpp fetch spec 36.331 16 2023-09
+npm run cli 3gpp fetch spec 36.331 17 2023-09
+npm run cli 3gpp fetch spec 36.423 16 2023-09
+npm run cli 3gpp fetch spec 36.423 17 2023-09
+npm run cli 3gpp fetch spec 37.355 16 2023-09
+npm run cli 3gpp fetch spec 37.355 17 2023-09
+npm run cli 3gpp fetch spec 37.483 17 2023-09
+npm run cli 3gpp fetch spec 38.331 16 2023-09
+npm run cli 3gpp fetch spec 38.331 17 2023-09
+npm run cli 3gpp fetch spec 38.413 16 2023-09
+npm run cli 3gpp fetch spec 38.413 17 2023-09
+npm run cli 3gpp fetch spec 38.423 16 2023-09
+npm run cli 3gpp fetch spec 38.423 17 2023-09
+npm run cli 3gpp fetch spec 38.463 16 2023-09
+npm run cli 3gpp fetch spec 38.473 16 2023-09
+npm run cli 3gpp fetch spec 38.473 17 2023-09
