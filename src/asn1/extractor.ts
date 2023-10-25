@@ -5,6 +5,8 @@ import { selectDelimiters } from "./delimiters.js";
 import { parse } from "path";
 
 const NonTagPatterns: Array<string | RegExp> = [
+  // Remove inline comment first
+  /--\s*?.*?--/gi,
   /--\s*?\(.*$/gim,
   /--\s*?\d.*$/gim,
   /--\s*?[ab].*$/gim,
