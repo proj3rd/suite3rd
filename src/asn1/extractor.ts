@@ -4,6 +4,15 @@ import WordExtractor from "word-extractor";
 import { selectDelimiters } from "./delimiters.js";
 import { parse } from "path";
 
+const NonTagPatterns: Array<string | RegExp> = [
+  /--\s*?\(.*$/gim,
+  /--\s*?\d.*$/gim,
+  /--\s*?[ab].*$/gim,
+  /--\s*?cont.*$/gim,
+  /--\s*?[d-m].*$/gim,
+  /--\s*?[o-z].*$/gim,
+];
+
 async function extractDoc(path: string) {
   const wordExtractor = new WordExtractor();
   const extracted = await wordExtractor.extract(path);
@@ -50,6 +59,11 @@ export function setExtractCommand(program: Command) {
         );
       }
 
-      writeFileSync(`${name}.asn1`, lines.join("\n"));
+      const asn1WithoutNonTag = NonTagPatterns.reduce(
+        (asn1: string, pattern: string | RegExp) => asn1.replace(pattern, ""),
+        lines.join("\n")
+      );
+
+      writeFileSync(`${name}.asn1`, asn1WithoutNonTag);
     });
 }
