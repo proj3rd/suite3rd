@@ -8,6 +8,7 @@
       "import": "./dist/esm/index.js"
     }
   },
+  "bin": "./dist/esm/bin.js",
   "scripts": {
     "build:esm": "npx tsc -p tsconfig.esm.json"
   },
@@ -15,6 +16,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^20.8.8",
+    "@types/word-extractor": "^1.0.4",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "word-extractor": "^1.0.4"
   }
 }
