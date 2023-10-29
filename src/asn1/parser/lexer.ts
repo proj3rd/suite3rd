@@ -14,9 +14,10 @@ const Identifier = createToken({
   name: "Identifier",
   pattern: /[a-z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
 });
-const Number = createToken({ name: "Number", pattern: /0|[1-9][0-9]+/ });
+const Number = createToken({ name: "Number", pattern: /0|[1-9][0-9]*/ });
 
 const AMPERSAND = createToken({ name: "Ampersand", pattern: "&" });
+const APOSTROPHE = createToken({ name: "Apostrophe", pattern: /'/ });
 const ASSIGNMENT = createToken({ name: "Assignment", pattern: "::=" });
 const AT = createToken({ name: "At", pattern: "@" });
 const COLON = createToken({ name: "Colon", pattern: ":" });
@@ -200,6 +201,7 @@ const WITH = createToken({
 const tokens = [
   WHITESPACE,
   AMPERSAND,
+  APOSTROPHE,
   ASSIGNMENT,
   AT,
   AUTOMATIC,
