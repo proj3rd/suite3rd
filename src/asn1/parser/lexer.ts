@@ -10,7 +10,10 @@ const TypeReference = createToken({
   name: "Type reference",
   pattern: /[A-Z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
 });
-
+const Identifier = createToken({
+  name: "Identifier",
+  pattern: /[a-z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
+});
 const Number = createToken({ name: "Number", pattern: /0|[1-9][0-9]+/ });
 
 const AMPERSAND = createToken({ name: "Ampersand", pattern: "&" });
@@ -112,10 +115,6 @@ const FROM = createToken({
   pattern: "FROM",
   longer_alt: TypeReference,
 });
-const Identifier = createToken({
-  name: "Identifier",
-  pattern: /[a-z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
-});
 const IMPLICIT = createToken({
   name: "IMPLICIT",
   pattern: "IMPLICIT",
@@ -154,6 +153,7 @@ const OPTIONAL = createToken({
 const PrintableString = createToken({
   name: "PrintableString",
   pattern: "PrintableString",
+  longer_alt: TypeReference,
 });
 const SEQUENCE = createToken({
   name: "SEQUENCE",
