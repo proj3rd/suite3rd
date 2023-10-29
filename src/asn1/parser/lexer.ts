@@ -1,26 +1,23 @@
 import { Lexer, createToken } from "chevrotain";
 
-// TODO: Add identifier tokens
-// TODO: Add `longer_alt` property
+const WHITESPACE = createToken({
+  name: "Whitespace",
+  pattern: /\s+/,
+  group: Lexer.SKIPPED,
+});
+
+const TypeReference = createToken({
+  name: "Type reference",
+  pattern: /[A-Z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
+});
+
 const AMPERSAND = createToken({ name: "Ampersand", pattern: "&" });
 const ASSIGNMENT = createToken({ name: "Assignment", pattern: "::=" });
 const AT = createToken({ name: "At", pattern: "@" });
-const AUTOMATIC = createToken({ name: "AUTOMATIC", pattern: "AUTOMATIC" });
-const BEGIN = createToken({ name: "BEGIN", pattern: "BEGIN" });
-const BIT = createToken({ name: "BIT", pattern: "BIT" });
-const BOOLEAN = createToken({ name: "BOOLEAN", pattern: "BOOLEAN" });
-const CHOICE = createToken({ name: "CHOICE", pattern: "CHOICE" });
 const COLON = createToken({ name: "Colon", pattern: ":" });
 const COMMA = createToken({ name: "Comma", pattern: "," });
-const COMPONENTS = createToken({ name: "COMPONENTS", pattern: "COMPONENTS" });
-const CONTAINING = createToken({ name: "CONTAINING", pattern: "CONTAINING" });
 const CURLY_LEFT = createToken({ name: "Left curly brace", pattern: "{" });
 const CURLY_RIGHT = createToken({ name: "Right curly brace", pattern: "}" });
-const DEFAULT = createToken({ name: "DEFAULT", pattern: "DEFAULT" });
-const DEFINITIONS = createToken({
-  name: "DEFINITIONS",
-  pattern: "DEFINITIONS",
-});
 const DOT = createToken({ name: "Dot", pattern: "." });
 const DBRACKET_LEFT = createToken({
   name: "Left double bracket",
@@ -30,53 +27,171 @@ const DBRACKET_RIGHT = createToken({
   name: "Right double bracket",
   pattern: "]]",
 });
-const END = createToken({ name: "END", pattern: "END" });
 const ELLIPSIS = createToken({ name: "Ellipsis", pattern: "..." });
-const ENUMERATED = createToken({ name: "ENUMERATED", pattern: "ENUMERATED" });
-const EXPLICIT = createToken({ name: "EXPLICIT", pattern: "EXPLICIT" });
-const EXPORTS = createToken({ name: "EXPORTS", pattern: "EXPORTS" });
-const FALSE = createToken({ name: "FALSE", pattern: "FALSE" });
-const FROM = createToken({ name: "FROM", pattern: "FROM" });
+const MINUS = createToken({ name: "Minus", pattern: "-" });
+const PAREN_LEFT = createToken({ name: "Left parenthesis", pattern: "(" });
+const PAREN_RIGHT = createToken({ name: "Right parenthesis", pattern: ")" });
+const SEMICOLON = createToken({ name: "Semicolon", pattern: ";" });
+const PIPE = createToken({ name: "Pipe", pattern: "|" });
+
+const AUTOMATIC = createToken({
+  name: "AUTOMATIC",
+  pattern: "AUTOMATIC",
+  longer_alt: TypeReference,
+});
+const BEGIN = createToken({
+  name: "BEGIN",
+  pattern: "BEGIN",
+  longer_alt: TypeReference,
+});
+const BIT = createToken({
+  name: "BIT",
+  pattern: "BIT",
+  longer_alt: TypeReference,
+});
+const BOOLEAN = createToken({
+  name: "BOOLEAN",
+  pattern: "BOOLEAN",
+  longer_alt: TypeReference,
+});
+const CHOICE = createToken({
+  name: "CHOICE",
+  pattern: "CHOICE",
+  longer_alt: TypeReference,
+});
+const COMPONENTS = createToken({
+  name: "COMPONENTS",
+  pattern: "COMPONENTS",
+  longer_alt: TypeReference,
+});
+const CONTAINING = createToken({
+  name: "CONTAINING",
+  pattern: "CONTAINING",
+  longer_alt: TypeReference,
+});
+const DEFAULT = createToken({
+  name: "DEFAULT",
+  pattern: "DEFAULT",
+  longer_alt: TypeReference,
+});
+const DEFINITIONS = createToken({
+  name: "DEFINITIONS",
+  pattern: "DEFINITIONS",
+  longer_alt: TypeReference,
+});
+const END = createToken({
+  name: "END",
+  pattern: "END",
+  longer_alt: TypeReference,
+});
+const ENUMERATED = createToken({
+  name: "ENUMERATED",
+  pattern: "ENUMERATED",
+  longer_alt: TypeReference,
+});
+const EXPLICIT = createToken({
+  name: "EXPLICIT",
+  pattern: "EXPLICIT",
+  longer_alt: TypeReference,
+});
+const EXPORTS = createToken({
+  name: "EXPORTS",
+  pattern: "EXPORTS",
+  longer_alt: TypeReference,
+});
+const FALSE = createToken({
+  name: "FALSE",
+  pattern: "FALSE",
+  longer_alt: TypeReference,
+});
+const FROM = createToken({
+  name: "FROM",
+  pattern: "FROM",
+  longer_alt: TypeReference,
+});
 const Identifier = createToken({
   name: "Identifier",
   pattern: /[a-z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
 });
-const IMPLICIT = createToken({ name: "IMPLICIT", pattern: "IMPLICIT" });
-const IMPORTS = createToken({ name: "IMPORTS", pattern: "IMPORTS" });
-const INTEGER = createToken({ name: "INTEGER", pattern: "INTEGER" });
-const NULL = createToken({ name: "NULL", pattern: "NULL" });
-const MINUS = createToken({ name: "Minus", pattern: "-" });
-const OCTET = createToken({ name: "OCTET", pattern: "OCTET" });
-const OF = createToken({ name: "OF", pattern: "OF" });
-const OPTIONAL = createToken({ name: "OPTIONAL", pattern: "OPTIONAL" });
-const PAREN_LEFT = createToken({ name: "Left parenthesis", pattern: "(" });
-const PAREN_RIGHT = createToken({ name: "Right parenthesis", pattern: ")" });
+const IMPLICIT = createToken({
+  name: "IMPLICIT",
+  pattern: "IMPLICIT",
+  longer_alt: TypeReference,
+});
+const IMPORTS = createToken({
+  name: "IMPORTS",
+  pattern: "IMPORTS",
+  longer_alt: TypeReference,
+});
+const INTEGER = createToken({
+  name: "INTEGER",
+  pattern: "INTEGER",
+  longer_alt: TypeReference,
+});
+const NULL = createToken({
+  name: "NULL",
+  pattern: "NULL",
+  longer_alt: TypeReference,
+});
+const OCTET = createToken({
+  name: "OCTET",
+  pattern: "OCTET",
+  longer_alt: TypeReference,
+});
+const OF = createToken({
+  name: "OF",
+  pattern: "OF",
+  longer_alt: TypeReference,
+});
+const OPTIONAL = createToken({
+  name: "OPTIONAL",
+  pattern: "OPTIONAL",
+  longer_alt: TypeReference,
+});
 const PrintableString = createToken({
   name: "PrintableString",
   pattern: "PrintableString",
 });
-const SEMICOLON = createToken({ name: "Semicolon", pattern: ";" });
-const SEQUENCE = createToken({ name: "SEQUENCE", pattern: "SEQUENCE" });
-const SIZE = createToken({ name: "SIZE", pattern: "SIZE" });
-const STRING = createToken({ name: "STRING", pattern: "STRING" });
-const TAGS = createToken({ name: "TAGS", pattern: "TAGS" });
-const TRUE = createToken({ name: "TRUE", pattern: "TRUE" });
-const TypeReference = createToken({
-  name: "Type reference",
-  pattern: /[A-Z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
+const SEQUENCE = createToken({
+  name: "SEQUENCE",
+  pattern: "SEQUENCE",
+  longer_alt: TypeReference,
 });
-const PIPE = createToken({ name: "Pipe", pattern: "|" });
-const UTF8String = createToken({ name: "UTF8String", pattern: "UTF8String" });
+const SIZE = createToken({
+  name: "SIZE",
+  pattern: "SIZE",
+  longer_alt: TypeReference,
+});
+const STRING = createToken({
+  name: "STRING",
+  pattern: "STRING",
+  longer_alt: TypeReference,
+});
+const TAGS = createToken({
+  name: "TAGS",
+  pattern: "TAGS",
+  longer_alt: TypeReference,
+});
+const TRUE = createToken({
+  name: "TRUE",
+  pattern: "TRUE",
+  longer_alt: TypeReference,
+});
+const UTF8String = createToken({
+  name: "UTF8String",
+  pattern: "UTF8String",
+  longer_alt: TypeReference,
+});
 const VisibleString = createToken({
   name: "VisibleString",
   pattern: "VisibleString",
+  longer_alt: TypeReference,
 });
-const WHITESPACE = createToken({
-  name: "Whitespace",
-  pattern: /\s+/,
-  group: Lexer.SKIPPED,
+const WITH = createToken({
+  name: "WITH",
+  pattern: "WITH",
+  longer_alt: TypeReference,
 });
-const WITH = createToken({ name: "WITH", pattern: "WITH" });
 
 // NOTE: Chevrotain chooses the first match
 const tokens = [
@@ -128,5 +243,7 @@ const tokens = [
   UTF8String,
   VisibleString,
   WITH,
+  Identifier,
+  TypeReference,
 ];
 export const lexer = new Lexer(tokens);
