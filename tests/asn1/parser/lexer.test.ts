@@ -17,7 +17,9 @@ describe("ASN.1 lexer", () => {
         resolve(__dirname, asn1ResourcePath, asn1file),
         "utf8"
       );
-      const tokens = lexer.tokenize(preprocess(content));
+      const tokens = lexer.tokenize(
+        preprocess(content, { capture3GppTagComment: true })
+      );
       if (tokens.errors.length) {
         console.log(tokens.errors);
       }
