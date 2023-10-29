@@ -4,6 +4,7 @@ import WordExtractor from "word-extractor";
 import { selectDelimiters } from "./delimiters.js";
 import { parse } from "path";
 
+// TODO: Move it to ASN.1 parser
 const NonTagPatterns: Array<string | RegExp> = [
   // Remove inline comment first
   /--\s*?.*?--/gi,
