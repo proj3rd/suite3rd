@@ -3,7 +3,6 @@ node_modules/
 *.zip
 *.doc
 *.docx
-*.asn1
 log
 
 dist/
