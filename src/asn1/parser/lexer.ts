@@ -37,6 +37,10 @@ const EXPLICIT = createToken({ name: "EXPLICIT", pattern: "EXPLICIT" });
 const EXPORTS = createToken({ name: "EXPORTS", pattern: "EXPORTS" });
 const FALSE = createToken({ name: "FALSE", pattern: "FALSE" });
 const FROM = createToken({ name: "FROM", pattern: "FROM" });
+const Identifier = createToken({
+  name: "Identifier",
+  pattern: /[a-z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
+});
 const IMPLICIT = createToken({ name: "IMPLICIT", pattern: "IMPLICIT" });
 const IMPORTS = createToken({ name: "IMPORTS", pattern: "IMPORTS" });
 const INTEGER = createToken({ name: "INTEGER", pattern: "INTEGER" });
@@ -57,6 +61,10 @@ const SIZE = createToken({ name: "SIZE", pattern: "SIZE" });
 const STRING = createToken({ name: "STRING", pattern: "STRING" });
 const TAGS = createToken({ name: "TAGS", pattern: "TAGS" });
 const TRUE = createToken({ name: "TRUE", pattern: "TRUE" });
+const TypeReference = createToken({
+  name: "Type reference",
+  pattern: /[A-Z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
+});
 const PIPE = createToken({ name: "Pipe", pattern: "|" });
 const UTF8String = createToken({ name: "UTF8String", pattern: "UTF8String" });
 const VisibleString = createToken({
