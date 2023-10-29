@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import { lexer } from "../../../src/asn1/parser/lexer";
 import { readFileSync, readdirSync } from "fs";
 import { resolve } from "path";
+import { preprocess } from "../../../src/asn1/parser/preprocessor";
 
 const asn1ResourcePath = "../../../resources/asn1";
 
@@ -16,7 +17,10 @@ describe("ASN.1 lexer", () => {
         resolve(__dirname, asn1ResourcePath, asn1file),
         "utf8"
       );
-      const tokens = lexer.tokenize(content);
+      const tokens = lexer.tokenize(preprocess(content));
+      if (tokens.errors.length) {
+        console.log(tokens.errors);
+      }
       expect(tokens.errors.length).toBe(0);
     });
   }
