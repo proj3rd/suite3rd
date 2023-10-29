@@ -11,6 +11,8 @@ const TypeReference = createToken({
   pattern: /[A-Z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
 });
 
+const Number = createToken({ name: "Number", pattern: /0|[1-9][0-9]+/ });
+
 const AMPERSAND = createToken({ name: "Ampersand", pattern: "&" });
 const ASSIGNMENT = createToken({ name: "Assignment", pattern: "::=" });
 const AT = createToken({ name: "At", pattern: "@" });
@@ -28,6 +30,7 @@ const DBRACKET_RIGHT = createToken({
   pattern: "]]",
 });
 const ELLIPSIS = createToken({ name: "Ellipsis", pattern: "..." });
+const RangeSeparator = createToken({ name: "Range separator", pattern: ".." });
 const MINUS = createToken({ name: "Minus", pattern: "-" });
 const PAREN_LEFT = createToken({ name: "Left parenthesis", pattern: "(" });
 const PAREN_RIGHT = createToken({ name: "Right parenthesis", pattern: ")" });
@@ -217,6 +220,7 @@ const tokens = [
   DBRACKET_RIGHT,
   END,
   ELLIPSIS,
+  RangeSeparator,
   ENUMERATED,
   EXPLICIT,
   EXPORTS,
@@ -245,5 +249,6 @@ const tokens = [
   WITH,
   Identifier,
   TypeReference,
+  Number,
 ];
 export const lexer = new Lexer(tokens);
