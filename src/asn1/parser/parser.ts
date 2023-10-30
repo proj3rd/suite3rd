@@ -29,6 +29,8 @@ import {
   OPTIONAL,
   PAREN_LEFT,
   PAREN_RIGHT,
+  PIPE,
+  RangeSeparator,
   SEMICOLON,
   SEQUENCE,
   STRING,
@@ -903,6 +905,141 @@ export class Asn1Parser extends CstParser {
     $.RULE("ElementSetSpec", () => {
       $.OR([
         { ALT: () => $.SUBRULE($$.Unions) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * Unions ::= Intersections
+     * |          UElems UnionMark Intersections
+     */
+    $.RULE("Unions", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.Intersections) },
+        {
+          ALT: () => {
+            $.SUBRULE($$.UElems);
+            $.SUBRULE($$.UnionMark);
+            $.SUBRULE($$.Intersections);
+          },
+        },
+      ]);
+    });
+
+    /**
+     * UElems ::= Unions
+     */
+    $.RULE("UElems", () => {
+      $.SUBRULE($$.Unions);
+    });
+
+    /**
+     * Intersections ::= IntersectionElements
+     * |                 IElems IntersectinMark IntersectionElements
+     */
+    $.RULE("Intersections", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.IntersectionElements) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * IntersectionElements ::= Elements | Elems Exclusions
+     */
+    $.RULE("IntersectionElements", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.Elements) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * UnionMark ::= "|" | UNION
+     */
+    $.RULE("UnionMark", () => {
+      $.OR([
+        { ALT: () => $.CONSUME(PIPE) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * Elements ::=
+     *   SubtypeElements
+     * | ObjectSetElements
+     * | "(" ElementSetSpec ")"
+     */
+    $.RULE("Elements", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.SubtypeElements) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * SubtypeElements ::=
+     *   SingleValue
+     * ...
+     * | ValueRange
+     * ...
+     */
+    $.RULE("SubtypeElements", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.SingleValue) },
+        { ALT: () => $.SUBRULE($$.ValueRange) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * SingleValue ::= Value
+     */
+    $.RULE("SingleValue", () => {
+      $.SUBRULE($$.Value);
+    });
+
+    /**
+     * ValueRange ::= LowerEndPoint ".." UpperEndPoint
+     */
+    $.RULE("ValueRange", () => {
+      $.SUBRULE($$.LowerEndPoint);
+      $.CONSUME(RangeSeparator);
+      $.SUBRULE($$.UpperEndPoint);
+    });
+
+    /**
+     * LowerEndPoint ::= LowerEndValue | LowerEndValue "<"
+     */
+    $.RULE("LowerEndPoint", () => {
+      $.SUBRULE($$.LowerEndValue);
+      // $.OPTION(() => {});
+    });
+
+    /**
+     * UpperEndPoint ::= UpperEndValue | "<" UpperEndValue
+     */
+    $.RULE("UpperEndPoint", () => {
+      // $.OPTION(() => {});
+      $.SUBRULE($$.UpperEndValue);
+    });
+
+    /**
+     * LowerEndValue ::= Value | MIN
+     */
+    $.RULE("LowerEndValue", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.Value) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * UpperEndValue ::= Value | MAX
+     */
+    $.RULE("UpperEndValue", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.Value) },
         // Others are omitted
       ]);
     });
