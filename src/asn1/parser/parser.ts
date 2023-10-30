@@ -271,6 +271,19 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
+     * DefinedValue ::=
+     *   ExternalValueReference
+     * | valuereference
+     * | ParameterizedValue
+     */
+    $.RULE("DefinedValue", () => {
+      $.OR([
+        // valuereference is equivalent to identifier
+        { ALT: () => $.CONSUME(Identifier) },
+      ]);
+    });
+
+    /**
      * TypeAssignment ::=
      *   typereference
      *   '::='
@@ -355,6 +368,14 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
+     * NamedType ::= identifier Type
+     */
+    $.RULE("NamedType", () => {
+      $.CONSUME(Identifier);
+      $.SUBRULE($$.Type);
+    });
+
+    /**
      * Value ::=
      *   BuiltinValue
      * | ReferencedValue
@@ -375,7 +396,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("BuiltinValue", () => {
       $.OR([
-        { ALT: () => $.SUBRULE($$.BitStringValue) },
+        // TODO: uncomment { ALT: () => $.SUBRULE($$.BitStringValue) },
         // Others are omitted
       ]);
     });
@@ -426,21 +447,55 @@ export class Asn1Parser extends CstParser {
 
     /**
      * Enumerations ::=
-     *   RootEnumerations
-     * | RootEnumerations "," "..." ExceptionSpec
-     * | RootEnumerations "," "..." ExceptionSpec "," AdditionalEnumerations
+     *   RootEnumeration
+     * | RootEnumeration "," "..." ExceptionSpec
+     * | RootEnumeration "," "..." ExceptionSpec "," AdditionalEnumerations
      */
     $.RULE("Enumerations", () => {
-      $.SUBRULE($$.RootEnumerations);
+      $.SUBRULE($$.RootEnumeration);
       $.OPTION(() => {
         $.CONSUME(COMMA);
         $.CONSUME(ELLIPSIS);
         // $.SUBRULE($$.ExceptionSpec);
         $.OPTION(() => {
           $.CONSUME(COMMA);
-          $.SUBRULE($$.AdditionalEnumerations);
+          $.SUBRULE($$.AdditionalEnumeration);
         });
       });
+    });
+
+    /**
+     * RootEnumeration ::= Enumeration
+     */
+    $.RULE("RootEnumeration", () => {
+      $.SUBRULE($$.Enumeration);
+    });
+
+    /**
+     * AdditionalEnumeration ::= Enumeration
+     */
+    $.RULE("AdditionalEnumeration", () => {
+      $.SUBRULE($$.Enumeration);
+    });
+
+    /**
+     * Enumeration ::= EnumerationItem | EnumerationItem "," Enumeration
+     */
+    $.RULE("Enumeration", () => {
+      $.AT_LEAST_ONE_SEP({
+        DEF: () => $.SUBRULE($$.EnumerationItem),
+        SEP: COMMA,
+      });
+    });
+
+    /**
+     * EnumerationItem ::= identifier | NamedNumber
+     */
+    $.RULE("EnumerationItem", () => {
+      $.OR([
+        { ALT: () => $.CONSUME(Identifier) },
+        // Others are omitted
+      ]);
     });
 
     /**
@@ -727,7 +782,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("ExtensionAdditionAlternativesGroup", () => {
       $.CONSUME(DBRACKET_LEFT);
-      $.SUBRULE($$.VersionNumber);
+      // $.SUBRULE($$.VersionNumber);
       $.SUBRULE($$.AlternativeTypeList);
       $.CONSUME(DBRACKET_RIGHT);
     });
@@ -763,6 +818,57 @@ export class Asn1Parser extends CstParser {
           ALT: () => $.SUBRULE($$.TypeWithConstraint),
         },
       ]);
+    });
+
+    /**
+     * TypeWithConstraint ::=
+     *   SET Constraint OF Type
+     * | SET SizeConstraint OF Type
+     * | SEQUENCE Constraint OF Type
+     * | SEQUENCE SizeConstraint Of Type
+     * | SET Constraint OF NamedType
+     * | SET SizeConstraint OF NamedType
+     * | SEQUENCE Constraint OF NamedType
+     * | SEQUENCE SizeConstraint Of NamedType
+     */
+    $.RULE("TypeWithConstraint", () => {
+      $.OR([{ ALT: () => $.CONSUME(SEQUENCE) }]);
+      $.OR([
+        { ALT: () => $.SUBRULE($$.Constraint) },
+        // { ALT: () => $.SUBRULE($$.SizeConstraint) },
+      ]);
+      $.OR([
+        { ALT: () => $.SUBRULE($$.Type) },
+        { ALT: () => $.SUBRULE($$.NamedType) },
+      ]);
+    });
+
+    /**
+     * Constraint ::= "(" ConstraintSpec ExceptionSpec ")"
+     */
+    $.RULE("Constraint", () => {
+      $.CONSUME(PAREN_LEFT);
+      $.SUBRULE($$.ConstraintSpec);
+      // $.SUBRULE($$.ExceptionSpec);
+      $.CONSUME(PAREN_RIGHT);
+    });
+
+    /**
+     * ConstraintSpec ::= SubtypeConstraint
+     * \                  GenralConstraint
+     */
+    $.RULE("ConstraintSpec", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.SubtypeConstraint) },
+        { ALT: () => $.SUBRULE($$.GenralConstraint) },
+      ]);
+    });
+
+    /**
+     * SubtypeConsraint ::= ElementSetSpecs
+     */
+    $.RULE("SubtypeConstraint", () => {
+      $.SUBRULE($$.ElementSetSpecs);
     });
 
     this.performSelfAnalysis();
