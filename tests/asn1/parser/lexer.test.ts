@@ -19,11 +19,12 @@ describe("ASN.1 lexer", () => {
         resolve(__dirname, asn1ResourcePath, asn1file),
         "utf8"
       );
-      const tokens = lexer.tokenize(content);
-      if (tokens.errors.length) {
-        console.log(tokens);
+
+      const lexingResult = lexer.tokenize(content);
+      if (lexingResult.errors.length) {
+        console.log(lexingResult);
       }
-      expect(tokens.errors.length).toBe(0);
+      expect(lexingResult.errors.length).toBe(0);
     });
   }
 });
