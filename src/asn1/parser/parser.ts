@@ -329,8 +329,8 @@ export class Asn1Parser extends CstParser {
           ALT: () => {
             $.SUBRULE($$.ReferencedType);
             // Brought Constraint from ConstrainedType -> Type Constraint to resolve left recursion
-            $.OPTION(() => {
-              $.SUBRULE($$.Constraint);
+            $.OPTION1(() => {
+              $.SUBRULE1($$.Constraint);
             });
           },
         },
