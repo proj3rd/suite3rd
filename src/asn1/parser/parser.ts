@@ -860,7 +860,7 @@ export class Asn1Parser extends CstParser {
     $.RULE("ConstraintSpec", () => {
       $.OR([
         { ALT: () => $.SUBRULE($$.SubtypeConstraint) },
-        { ALT: () => $.SUBRULE($$.GenralConstraint) },
+        // { ALT: () => $.SUBRULE($$.GenralConstraint) },
       ]);
     });
 
@@ -869,6 +869,42 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("SubtypeConstraint", () => {
       $.SUBRULE($$.ElementSetSpecs);
+    });
+
+    /**
+     * ElementSetSpecs ::=
+     *   RootElementSetSpec
+     * | RootElementSetSpec "," "..."
+     * | RootElementSetSpec "," "..." "," AdditionalElementSetSpec
+     */
+    $.RULE("ElementSetSpecs", () => {
+      $.SUBRULE($$.RootElementSetSpec);
+      // $.OPTION(() => {
+      //   $.CONSUME(COMMA);
+      //   $.CONSUME(ELLIPSIS);
+      //   $.OPTION(() => {
+      //     $.CONSUME(COMMA);
+      //     $.SUBRULE($$.AdditionalElementSetSpec);
+      //   });
+      // });
+    });
+
+    /**
+     * RootElementSetSpec ::= ElementSetSpec
+     */
+    $.RULE("RootElementSetSpec", () => {
+      $.SUBRULE($$.ElementSetSpec);
+    });
+
+    /**
+     * ElementSetSpec ::= Unions
+     * |                  ALL Exclusions
+     */
+    $.RULE("ElementSetSpec", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.Unions) },
+        // Others are omitted
+      ]);
     });
 
     this.performSelfAnalysis();
