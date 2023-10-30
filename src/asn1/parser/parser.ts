@@ -914,16 +914,22 @@ export class Asn1Parser extends CstParser {
      * |          UElems UnionMark Intersections
      */
     $.RULE("Unions", () => {
-      $.OR([
-        { ALT: () => $.SUBRULE($$.Intersections) },
-        {
-          ALT: () => {
-            $.SUBRULE($$.UElems);
-            $.SUBRULE($$.UnionMark);
-            $.SUBRULE1($$.Intersections);
-          },
-        },
-      ]);
+      // Without left recursion
+      $.AT_LEAST_ONE_SEP({
+        DEF: () => $.SUBRULE($$.Intersections),
+        SEP: $.SUBRULE($$.UnionMark),
+      });
+      // With left recursion
+      // $.OR([
+      //   { ALT: () => $.SUBRULE($$.Intersections) },
+      //   {
+      //     ALT: () => {
+      //       $.SUBRULE($$.UElems);
+      //       $.SUBRULE($$.UnionMark);
+      //       $.SUBRULE1($$.Intersections);
+      //     },
+      //   },
+      // ]);
     });
 
     /**
