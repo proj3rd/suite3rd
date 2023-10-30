@@ -316,8 +316,24 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("Type", () => {
       $.OR([
-        { ALT: () => $.SUBRULE($$.BuiltinType) },
-        { ALT: () => $.SUBRULE($$.ReferencedType) },
+        {
+          ALT: () => {
+            $.SUBRULE($$.BuiltinType);
+            // Brought Constraint from ConstrainedType -> Type Constraint to resolve left recursion
+            $.OPTION(() => {
+              $.SUBRULE($$.Constraint);
+            });
+          },
+        },
+        {
+          ALT: () => {
+            $.SUBRULE($$.ReferencedType);
+            // Brought Constraint from ConstrainedType -> Type Constraint to resolve left recursion
+            $.OPTION(() => {
+              $.SUBRULE($$.Constraint);
+            });
+          },
+        },
         { ALT: () => $.SUBRULE($$.ConstrainedType) },
       ]);
     });
@@ -810,12 +826,14 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("ConstrainedType", () => {
       $.OR([
-        {
-          ALT: () => {
-            $.SUBRULE($$.Type);
-            $.SUBRULE($$.Constraint);
-          },
-        },
+        // Left recursion due to Type -> ConstrainedType -> Type Constraint
+        // Moved Constraint directly next to Type and made it optionsl
+        // {
+        //   ALT: () => {
+        //     $.SUBRULE($$.Type);
+        //     $.SUBRULE($$.Constraint);
+        //   },
+        // },
         {
           ALT: () => $.SUBRULE($$.TypeWithConstraint),
         },
