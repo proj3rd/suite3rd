@@ -312,7 +312,14 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
+     * Original (with left recursion)
      * Type ::= BuiltinType | ReferencedType | ConstrainedType
+     * 
+     * Modified (without left recursion)
+     * Type ::=
+     *   BuiltinType Constraint?
+     * | ReferencedType Constraint?
+     * | ConstrainedType (== TypeWithConstraint)
      */
     $.RULE("Type", () => {
       $.OR([
