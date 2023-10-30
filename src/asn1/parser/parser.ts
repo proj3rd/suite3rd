@@ -22,20 +22,20 @@ import {
   IMPLICIT,
   IMPORTS,
   INTEGER,
-  Identifier,
+  identifier,
   NULL,
-  Number,
+  number,
   OCTET,
   OPTIONAL,
   PAREN_LEFT,
   PAREN_RIGHT,
-  PIPE,
-  RangeSeparator,
+  VERTICAL_LINE,
+  RANGE_SEPARATOR,
   SEMICOLON,
   SEQUENCE,
   STRING,
   TAGS,
-  TypeReference,
+  typereference,
   tokens,
 } from "./lexer";
 
@@ -92,7 +92,7 @@ export class Asn1Parser extends CstParser {
      *   DefinitiveIdentification
      */
     $.RULE("ModuleIdentifier", () => {
-      $.CONSUME(TypeReference);
+      $.CONSUME(typereference);
       // $.SUBRULE($$.DefinitiveIdentification);
     });
 
@@ -179,7 +179,7 @@ export class Asn1Parser extends CstParser {
      *   modulereference AssignedIdentifier
      */
     $.RULE("GlobalModuleReference", () => {
-      $.CONSUME(TypeReference);
+      $.CONSUME(typereference);
       // $.SUBRULE($$.AssignedIdentifier)
     });
 
@@ -219,9 +219,9 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("Reference", () => {
       $.OR([
-        { ALT: () => $.CONSUME(TypeReference) },
+        { ALT: () => $.CONSUME(typereference) },
         // valuereference is equivalent to identifier
-        { ALT: () => $.CONSUME(Identifier) },
+        { ALT: () => $.CONSUME(identifier) },
         // Others are omitted
       ]);
     });
@@ -267,7 +267,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("DefinedType", () => {
       $.OR([
-        { ALT: () => $.CONSUME(TypeReference) },
+        { ALT: () => $.CONSUME(typereference) },
         // Others are omitted
       ]);
     });
@@ -281,7 +281,7 @@ export class Asn1Parser extends CstParser {
     $.RULE("DefinedValue", () => {
       $.OR([
         // valuereference is equivalent to identifier
-        { ALT: () => $.CONSUME(Identifier) },
+        { ALT: () => $.CONSUME(identifier) },
       ]);
     });
 
@@ -292,7 +292,7 @@ export class Asn1Parser extends CstParser {
      *   Type
      */
     $.RULE("TypeAssignment", () => {
-      $.CONSUME(TypeReference);
+      $.CONSUME(typereference);
       $.CONSUME(ASSIGNMENT);
       $.SUBRULE($$.Type);
     });
@@ -305,7 +305,7 @@ export class Asn1Parser extends CstParser {
      *   Value
      */
     $.RULE("ValueAssignment", () => {
-      $.CONSUME(Identifier);
+      $.CONSUME(identifier);
       $.SUBRULE($$.Type);
       $.CONSUME(ASSIGNMENT);
       $.SUBRULE($$.Value);
@@ -373,7 +373,7 @@ export class Asn1Parser extends CstParser {
      * NamedType ::= identifier Type
      */
     $.RULE("NamedType", () => {
-      $.CONSUME(Identifier);
+      $.CONSUME(identifier);
       $.SUBRULE($$.Type);
     });
 
@@ -459,8 +459,8 @@ export class Asn1Parser extends CstParser {
         $.CONSUME(COMMA);
         $.CONSUME(ELLIPSIS);
         // $.SUBRULE($$.ExceptionSpec);
-        $.OPTION(() => {
-          $.CONSUME(COMMA);
+        $.OPTION1(() => {
+          $.CONSUME1(COMMA);
           $.SUBRULE($$.AdditionalEnumeration);
         });
       });
@@ -495,7 +495,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("EnumerationItem", () => {
       $.OR([
-        { ALT: () => $.CONSUME(Identifier) },
+        { ALT: () => $.CONSUME(identifier) },
         // Others are omitted
       ]);
     });
@@ -592,7 +592,7 @@ export class Asn1Parser extends CstParser {
         {
           ALT: () => {
             $.OPTION(() => {
-              $.SUBRULE($$.RootComponentTypeList);
+              $.SUBRULE1($$.RootComponentTypeList);
               $.CONSUME(COMMA);
             });
             $.SUBRULE($$.ExtensionAndException);
@@ -691,7 +691,7 @@ export class Asn1Parser extends CstParser {
         {
           ALT: () => {
             $.SUBRULE($$.NamedType);
-            $.OR([
+            $.OR1([
               { ALT: () => $.CONSUME(OPTIONAL) },
               {
                 ALT: () => {
@@ -835,11 +835,11 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("TypeWithConstraint", () => {
       $.OR([{ ALT: () => $.CONSUME(SEQUENCE) }]);
-      $.OR([
+      $.OR1([
         { ALT: () => $.SUBRULE($$.Constraint) },
         // { ALT: () => $.SUBRULE($$.SizeConstraint) },
       ]);
-      $.OR([
+      $.OR2([
         { ALT: () => $.SUBRULE($$.Type) },
         { ALT: () => $.SUBRULE($$.NamedType) },
       ]);
@@ -920,7 +920,7 @@ export class Asn1Parser extends CstParser {
           ALT: () => {
             $.SUBRULE($$.UElems);
             $.SUBRULE($$.UnionMark);
-            $.SUBRULE($$.Intersections);
+            $.SUBRULE1($$.Intersections);
           },
         },
       ]);
@@ -959,7 +959,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("UnionMark", () => {
       $.OR([
-        { ALT: () => $.CONSUME(PIPE) },
+        { ALT: () => $.CONSUME(VERTICAL_LINE) },
         // Others are omitted
       ]);
     });
@@ -1004,7 +1004,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("ValueRange", () => {
       $.SUBRULE($$.LowerEndPoint);
-      $.CONSUME(RangeSeparator);
+      $.CONSUME(RANGE_SEPARATOR);
       $.SUBRULE($$.UpperEndPoint);
     });
 
