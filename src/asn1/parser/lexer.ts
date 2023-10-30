@@ -22,6 +22,13 @@ const ASSIGNMENT = createToken({ name: "Assignment", pattern: "::=" });
 const AT = createToken({ name: "At", pattern: "@" });
 const COLON = createToken({ name: "Colon", pattern: ":" });
 const COMMA = createToken({ name: "Comma", pattern: "," });
+const COMMENT_CLOSED = createToken({
+  name: "Closed comment",
+  pattern: /--.*--/,
+  group: Lexer.SKIPPED,
+});
+// Open comment is not skipped because it is possibly 3GPP tag comment
+const COMMENT_OPEN = createToken({ name: "Open comment", pattern: /--.*/ });
 const CURLY_LEFT = createToken({ name: "Left curly brace", pattern: "{" });
 const CURLY_RIGHT = createToken({ name: "Right curly brace", pattern: "}" });
 const DOT = createToken({ name: "Dot", pattern: "." });
@@ -200,6 +207,8 @@ const WITH = createToken({
 // NOTE: Chevrotain chooses the first match
 const tokens = [
   WHITESPACE,
+  COMMENT_CLOSED,
+  COMMENT_OPEN,
   AMPERSAND,
   APOSTROPHE,
   ASSIGNMENT,
