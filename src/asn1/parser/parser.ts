@@ -636,6 +636,14 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
+     * ExtensionEndMarker ::= "," "..."
+     */
+    $.RULE("ExtensionEndMarker", () => {
+      $.CONSUME(COMMA);
+      $.CONSUME(ELLIPSIS);
+    });
+
+    /**
      * ExtensionAdditions ::=
      *   "," ExtensionAdditionList
      * | empty
@@ -1010,8 +1018,9 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("SubtypeElements", () => {
       $.OR([
-        { ALT: () => $.SUBRULE($$.SingleValue) },
+        // ValueRange has longer match than SingleValue
         { ALT: () => $.SUBRULE($$.ValueRange) },
+        { ALT: () => $.SUBRULE($$.SingleValue) },
         // Others are omitted
       ]);
     });
