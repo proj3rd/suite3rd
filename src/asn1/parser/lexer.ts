@@ -6,6 +6,19 @@ export const whitespace = createToken({
   group: Lexer.SKIPPED,
 });
 
+// word: upper-case letters and hyphen
+export const word = createToken({
+  name: "word",
+  pattern: /[A-Z][A-Z]*(-[A-Z]+)*/,
+});
+// objectclassreference: word + digits
+// NOTE: Parser rule Objectclasreference should be used
+export const objectclassreference = createToken({
+  name: "objectclassreference",
+  pattern: /[A-Z][A-Z0-9]*(-[A-Z0-9]+)*/,
+});
+// typereference: objectlcassreference + lower-case letters
+// NOTE: Parser rule Typereference should be used
 export const typereference = createToken({
   name: "typereference",
   pattern: /[A-Z][A-Za-z0-9]*(-[A-Za-z0-9]+)*/,
@@ -84,157 +97,162 @@ export const VERTICAL_LINE = createToken({
 export const AUTOMATIC = createToken({
   name: "AUTOMATIC",
   pattern: "AUTOMATIC",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const BEGIN = createToken({
   name: "BEGIN",
   pattern: "BEGIN",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const BIT = createToken({
   name: "BIT",
   pattern: "BIT",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const BOOLEAN = createToken({
   name: "BOOLEAN",
   pattern: "BOOLEAN",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const CHOICE = createToken({
   name: "CHOICE",
   pattern: "CHOICE",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
+});
+export const CLASS = createToken({
+  name: "CLASS",
+  pattern: "CLASS",
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const COMPONENTS = createToken({
   name: "COMPONENTS",
   pattern: "COMPONENTS",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const CONTAINING = createToken({
   name: "CONTAINING",
   pattern: "CONTAINING",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const DEFAULT = createToken({
   name: "DEFAULT",
   pattern: "DEFAULT",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const DEFINITIONS = createToken({
   name: "DEFINITIONS",
   pattern: "DEFINITIONS",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const END = createToken({
   name: "END",
   pattern: "END",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const ENUMERATED = createToken({
   name: "ENUMERATED",
   pattern: "ENUMERATED",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const EXPLICIT = createToken({
   name: "EXPLICIT",
   pattern: "EXPLICIT",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const EXPORTS = createToken({
   name: "EXPORTS",
   pattern: "EXPORTS",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const FALSE = createToken({
   name: "FALSE",
   pattern: "FALSE",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const FROM = createToken({
   name: "FROM",
   pattern: "FROM",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const IMPLICIT = createToken({
   name: "IMPLICIT",
   pattern: "IMPLICIT",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const IMPORTS = createToken({
   name: "IMPORTS",
   pattern: "IMPORTS",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const INTEGER = createToken({
   name: "INTEGER",
   pattern: "INTEGER",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const NULL = createToken({
   name: "NULL",
   pattern: "NULL",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const OCTET = createToken({
   name: "OCTET",
   pattern: "OCTET",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const OF = createToken({
   name: "OF",
   pattern: "OF",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const OPTIONAL = createToken({
   name: "OPTIONAL",
   pattern: "OPTIONAL",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const PrintableString = createToken({
   name: "PrintableString",
   pattern: "PrintableString",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const SEQUENCE = createToken({
   name: "SEQUENCE",
   pattern: "SEQUENCE",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const SIZE = createToken({
   name: "SIZE",
   pattern: "SIZE",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const STRING = createToken({
   name: "STRING",
   pattern: "STRING",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const TAGS = createToken({
   name: "TAGS",
   pattern: "TAGS",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const TRUE = createToken({
   name: "TRUE",
   pattern: "TRUE",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const UTF8String = createToken({
   name: "UTF8String",
   pattern: "UTF8String",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const VisibleString = createToken({
   name: "VisibleString",
   pattern: "VisibleString",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 export const WITH = createToken({
   name: "WITH",
   pattern: "WITH",
-  longer_alt: typereference,
+  longer_alt: [word, objectclassreference, typereference],
 });
 
 // NOTE: Chevrotain chooses the first match
@@ -252,6 +270,7 @@ export const tokens = [
   BIT,
   BOOLEAN,
   CHOICE,
+  CLASS,
   COLON,
   COMMA,
   COMPONENTS,
@@ -295,6 +314,8 @@ export const tokens = [
   VisibleString,
   WITH,
   identifier,
+  word,
+  objectclassreference,
   typereference,
   number,
 ];
