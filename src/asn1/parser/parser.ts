@@ -41,8 +41,10 @@ import {
   SIZE,
   HYPHEN_MINUS,
   OF,
+  CLASS,
   word,
   objectclassreference,
+  AMPERSAND,
 } from "./lexer";
 
 const unimpl = () => {
@@ -346,6 +348,7 @@ export class Asn1Parser extends CstParser {
       $.OR([
         { ALT: () => $.SUBRULE($$.TypeAssignment) },
         { ALT: () => $.SUBRULE($$.ValueAssignment) },
+        { ALT: () => $.SUBRULE($$.ObjectClassAssignment) },
         // Others are omitted
       ]);
     });
@@ -1244,6 +1247,96 @@ export class Asn1Parser extends CstParser {
     $.RULE("SizeConstraint", () => {
       $.CONSUME(SIZE);
       $.SUBRULE($$.Constraint);
+    });
+
+    /**
+     * X.681
+     */
+    $.RULE("typefieldreference", () => {
+      $.CONSUME(AMPERSAND);
+      $.SUBRULE($$.Typereference);
+    });
+
+    /**
+     * ObjectClassAssignment ::=
+     *   objectclassreference
+     *   "::="
+     *   ObjectClass
+     */
+    $.RULE("ObjectClassAssignment", () => {
+      $.SUBRULE($$.Objectclassreference);
+      $.CONSUME(ASSIGNMENT);
+      $.SUBRULE($$.ObjectClass);
+    });
+
+    /**
+     * ObjectClass ::=
+     *   DefinedObjectClass
+     * | ObjectClassDefn
+     * | ParameterizedObjectClass
+     */
+    $.RULE("ObjectClass", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.ObjectClassDefn) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * ObjectClassDefn ::=
+     *   CLASS
+     *   "{" FieldSpec "," + "}"
+     *   WithSyntaxSpec?
+     */
+    $.RULE("ObjectClassDefn", () => {
+      $.CONSUME(CLASS);
+      $.CONSUME(CURLY_LEFT);
+      $.AT_LEAST_ONE_SEP({
+        DEF: () => $.SUBRULE($$.FieldSpec),
+        SEP: COMMA,
+      });
+      $.CONSUME(CURLY_RIGHT);
+      $.OPTION(() => {
+        $.SUBRULE($$.WithSyntaxSpec);
+      });
+    });
+
+    /**
+     * FieldSpec ::=
+     *   TypeFieldSpec
+     * ...
+     */
+    $.RULE("FieldSpec", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.TypeFieldSpec) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * TypeFieldSpec ::=
+     *   typefieldreference
+     *   TypeOptionalitySpec?
+     */
+    $.RULE("TypeFieldSpec", () => {
+      $.SUBRULE($$.typefieldreference);
+      $.OPTION(() => {
+        $.SUBRULE($$.TypeOptionalitySpec);
+      });
+    });
+
+    /**
+     * TypeOptionalitySpec ::= OPTIONAL | DEFAULT Type
+     */
+    $.RULE("TypeOptionalitySpec", () => {
+      $.OR([
+        { ALT: () => $.CONSUME(OPTIONAL) },
+        {
+          ALT: () => {
+            $.CONSUME(DEFAULT), $.SUBRULE($$.Type);
+          },
+        },
+      ]);
     });
 
     /**
