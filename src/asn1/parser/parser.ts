@@ -40,6 +40,7 @@ import {
   BIT_STRING_VALUE_QUOTED,
   SIZE,
   HYPHEN_MINUS,
+  OF,
   word,
   objectclassreference,
 } from "./lexer";
