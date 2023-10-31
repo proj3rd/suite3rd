@@ -1066,7 +1066,8 @@ export class Asn1Parser extends CstParser {
       // Without left recursion
       $.AT_LEAST_ONE_SEP({
         DEF: () => $.SUBRULE($$.Intersections),
-        SEP: $.SUBRULE($$.UnionMark),
+        // TODO: Use UnionMark rule instead of VERTICAL_LinE token
+        SEP: VERTICAL_LINE,
       });
       // With left recursion
       // $.OR([
