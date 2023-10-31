@@ -231,6 +231,11 @@ export const TRUE = createToken({
   pattern: "TRUE",
   longer_alt: typereference,
 });
+export const UNIQUE = createToken({
+  name: "UNIQUE",
+  pattern: "UNIQUE",
+  longer_alt: typereference,
+});
 export const UTF8String = createToken({
   name: "UTF8String",
   pattern: "UTF8String",
@@ -299,8 +304,10 @@ export const tokens = [
   SEQUENCE,
   SIZE,
   STRING,
+  SYNTAX,
   TAGS,
   TRUE,
+  UNIQUE,
   VERTICAL_LINE,
   UTF8String,
   VisibleString,
