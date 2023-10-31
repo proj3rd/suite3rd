@@ -39,6 +39,8 @@ import {
   tokens,
   BIT_STRING_VALUE_QUOTED,
   SIZE,
+  word,
+  objectclassreference,
 } from "./lexer";
 
 const unimpl = () => {
@@ -50,6 +52,22 @@ export class Asn1Parser extends CstParser {
     super(tokens);
     const $ = this;
     const $$ = $ as any;
+
+    /**
+     * Implementation hacks
+     */
+    $.RULE("Objectclassreference", () => {
+      $.OR([
+        { ALT: () => $.CONSUME(word) },
+        { ALT: () => $.CONSUME(objectclassreference) },
+      ]);
+    });
+    $.RULE("Typereference", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.Objectclassreference) },
+        { ALT: () => $.SUBRULE($$.Typereference) },
+      ]);
+    });
 
     /**
      * ModuleDefinitionList ::= ModuleDefinition+
@@ -94,7 +112,7 @@ export class Asn1Parser extends CstParser {
      *   DefinitiveIdentification
      */
     $.RULE("ModuleIdentifier", () => {
-      $.CONSUME(typereference);
+      $.SUBRULE($$.Typereference);
       $.SUBRULE($$.DefinitiveIdentification);
     });
 
@@ -245,7 +263,7 @@ export class Asn1Parser extends CstParser {
      *   modulereference AssignedIdentifier
      */
     $.RULE("GlobalModuleReference", () => {
-      $.CONSUME(typereference);
+      $.SUBRULE($$.Typereference);
       // $.SUBRULE($$.AssignedIdentifier)
     });
 
@@ -291,7 +309,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("Reference", () => {
       $.OR([
-        { ALT: () => $.CONSUME(typereference) },
+        { ALT: () => $.SUBRULE($$.Typereference) },
         // valuereference is equivalent to identifier
         { ALT: () => $.CONSUME(identifier) },
         // Others are omitted
@@ -339,7 +357,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("DefinedType", () => {
       $.OR([
-        { ALT: () => $.CONSUME(typereference) },
+        { ALT: () => $.SUBRULE($$.Typereference) },
         // Others are omitted
       ]);
     });
@@ -365,7 +383,7 @@ export class Asn1Parser extends CstParser {
      *   Type
      */
     $.RULE("TypeAssignment", () => {
-      $.CONSUME(typereference);
+      $.SUBRULE($$.Typereference);
       $.CONSUME(ASSIGNMENT);
       $.SUBRULE($$.Type);
     });
