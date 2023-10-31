@@ -43,6 +43,11 @@ import {
   OF,
   CLASS,
   AMPERSAND,
+  WITH,
+  SYNTAX,
+  BRACKET_LEFT,
+  BRACKET_RIGHT,
+  UNIQUE,
 } from "./lexer";
 
 const is_word = (token: string) => token.match(/^[A-Z][A-Z]*(-[A-Z]+)*$/);
@@ -1239,6 +1244,11 @@ export class Asn1Parser extends CstParser {
       $.CONSUME(typereference);
     });
 
+    $.RULE("valuefieldreference", () => {
+      $.CONSUME(AMPERSAND);
+      $.CONSUME(identifier);
+    });
+
     /**
      * ObjectClassAssignment ::=
      *   objectclassreference
@@ -1289,13 +1299,25 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
+     * WithSyntaxSpec ::=
+     *   WITH SYNTAX SyntaxList
+     */
+    $.RULE("WithSyntaxSpec", () => {
+      $.CONSUME(WITH);
+      $.CONSUME(SYNTAX);
+      $.SUBRULE($$.SyntaxList);
+    });
+
+    /**
      * FieldSpec ::=
      *   TypeFieldSpec
+     * | FixedTypeValueFieldSpec
      * ...
      */
     $.RULE("FieldSpec", () => {
       $.OR([
         { ALT: () => $.SUBRULE($$.TypeFieldSpec) },
+        { ALT: () => $.SUBRULE($$.FixedTypeValueFieldSpec) },
         // Others are omitted
       ]);
     });
@@ -1323,6 +1345,115 @@ export class Asn1Parser extends CstParser {
             $.CONSUME(DEFAULT), $.SUBRULE($$.Type);
           },
         },
+      ]);
+    });
+
+    /**
+     * FixedTypeValueFieldSpec ::=
+     *   valuefieldreference
+     *   Type
+     *   UNIQUE?
+     *   ValueOptionalitySpec?
+     */
+    $.RULE("FixedTypeValueFieldSpec", () => {
+      $.SUBRULE($$.valuefieldreference);
+      $.SUBRULE($$.Type);
+      $.OPTION(() => {
+        $.CONSUME(UNIQUE);
+      });
+      $.OPTION1(() => {
+        $.SUBRULE($$.ValueOptionalitySpec);
+      });
+    });
+
+    /**
+     * ValueOptionalitySpec ::=
+     *   OPTIONAL | DEFAULT Value
+     */
+    $.RULE("ValueOptionalitySpec", () => {
+      $.OR([
+        { ALT: () => $.CONSUME(OPTIONAL) },
+        {
+          ALT: () => {
+            $.CONSUME(DEFAULT);
+            $.SUBRULE($$.Value);
+          },
+        },
+      ]);
+    });
+
+    /**
+     * SyntaxList ::= "{" TokenOrGroupSpec empty + "}"
+     */
+    $.RULE("SyntaxList", () => {
+      $.CONSUME(CURLY_LEFT);
+      $.AT_LEAST_ONE(() => $.SUBRULE($$.TokenOrGroupSpec));
+      $.CONSUME(CURLY_RIGHT);
+    });
+
+    /**
+     * TokenOrGroupSpec ::= RequiredToken | OptionalGroup
+     */
+    $.RULE("TokenOrGroupSpec", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.RequiredToken) },
+        { ALT: () => $.SUBRULE($$.OptionalGroup) },
+      ]);
+    });
+
+    /**
+     * OptionalGroup ::= "[" TokenOrGroupSpec "]"
+     */
+    $.RULE("OptionalGroup", () => {
+      $.CONSUME(BRACKET_LEFT);
+      $.AT_LEAST_ONE(() => $.SUBRULE($$.TokenOrGroupSpec));
+      $.CONSUME(BRACKET_RIGHT);
+    });
+
+    /**
+     * RequiredToken ::= Literal | PrimitiveFieldName
+     */
+    $.RULE("RequiredToken", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.Literal) },
+        { ALT: () => $.SUBRULE($$.PrimitiveFieldName) },
+      ]);
+    });
+
+    /**
+     * Literal ::= word | ","
+     */
+    $.RULE("Literal", () => {
+      $.OR([
+        {
+          ALT: () => {
+            const word = $.CONSUME(typereference);
+            $.ACTION(() => {
+              if (!is_word(word.image)) {
+                throw Error(
+                  "Left-hand side should not contain lower-case letters and digits."
+                );
+              }
+            });
+          },
+        },
+        { ALT: () => $.CONSUME(COMMA) },
+      ]);
+    });
+
+    /**
+     * PrimitiveFieldName ::=
+     *   typefieldreference
+     * | valuefieldreference
+     * | valuesetfieldreference
+     * | objectfieldreference
+     * | objectsetfieldreference
+     */
+    $.RULE("PrimitiveFieldName", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.typefieldreference) },
+        { ALT: () => $.SUBRULE($$.valuefieldreference) },
+        // Others are omitted
       ]);
     });
 
