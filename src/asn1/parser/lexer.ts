@@ -20,6 +20,10 @@ export const AMPERSAND = createToken({ name: "AMPERSAND", pattern: "&" });
 export const APOSTROPHE = createToken({ name: "APOSTROPHE", pattern: /'/ });
 export const ASSIGNMENT = createToken({ name: "ASSIGNMENT", pattern: "::=" });
 export const AT = createToken({ name: "COMMERCIAL AT", pattern: "@" });
+export const BIT_STRING_VALUE_QUOTED = createToken({
+  name: "BIT_STRING_VALUE_QUOTED",
+  pattern: /'[01]+'B/,
+});
 export const COLON = createToken({ name: "COLON", pattern: ":" });
 export const COMMA = createToken({ name: "COMMA", pattern: "," });
 export const COMMENT_CLOSED = createToken({
@@ -231,6 +235,7 @@ export const tokens = [
   COMMENT_CLOSED,
   COMMENT_OPEN,
   AMPERSAND,
+  BIT_STRING_VALUE_QUOTED,
   APOSTROPHE,
   ASSIGNMENT,
   AT,

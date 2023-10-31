@@ -37,6 +37,7 @@ import {
   TAGS,
   typereference,
   tokens,
+  BIT_STRING_VALUE_QUOTED,
 } from "./lexer";
 
 const unimpl = () => {
@@ -314,7 +315,7 @@ export class Asn1Parser extends CstParser {
     /**
      * Original (with left recursion)
      * Type ::= BuiltinType | ReferencedType | ConstrainedType
-     * 
+     *
      * Modified (without left recursion)
      * Type ::=
      *   BuiltinType Constraint?
@@ -421,7 +422,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("BuiltinValue", () => {
       $.OR([
-        // TODO: uncomment { ALT: () => $.SUBRULE($$.BitStringValue) },
+        { ALT: () => $.SUBRULE($$.BitStringValue) },
         // Others are omitted
       ]);
     });
@@ -539,6 +540,15 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
+     * BitStringValue ::=
+     *   bstring
+     * ...
+     */
+    $.RULE("BitStringValue", () => {
+      $.CONSUME(BIT_STRING_VALUE_QUOTED);
+    });
+
+    /**
      * OctetStringType ::= OCTET STRING
      */
     $.RULE("OctetStringType", () => {
@@ -554,27 +564,66 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
+     * Original
      * SequenceType ::=
      *   SEQUENCE "{" "}"
      * | SEQUENCE "{" ExtensionAndException OptionalExtensionMarker "}"
      * | SEQUENCE "{" ComponentTypeLists "}"
+     *
+     * Modified
+     * SequenceType ::=
+     * SEQUENCE "{" RootComponentTypeList                                                                                           "}"
+     * SEQUENCE "{" RootComponentTypeList "," ExtensionAndException ExtensionAdditions OptionalExtensionMarker                      "}"
+     * SEQUENCE "{" RootComponentTypeList "," ExtensionAndException ExtensionAdditions ExtensionEndMarker "," RootComponentTypeList "}"
+     * SEQUENCE "{"                           ExtensionAndException ExtensionAdditions ExtensionEndMarker "," RootComponentTypeList "}"
+     * SEQUENCE "{"                           ExtensionAndException ExtensionAdditions OptionalExtensionMarker                      "}"
+     * SEQUENCE "{"                           ExtensionAndException                    OptionalExtensionMarker                      "}"
+     * SEQUENCE "{"                                                                                                                 "}"
+     *
+     * Reduced scope
+     * SequenceType ::=
+     * SEQUENCE "{" RootComponentTypeList                                                                                           "}"
+     * SEQUENCE "{" RootComponentTypeList "," ExtensionAndException ExtensionAdditions                                              "}"
      */
     $.RULE("SequenceType", () => {
       $.CONSUME(SEQUENCE);
       $.CONSUME(CURLY_LEFT);
-      $.OPTION(() => {
-        $.OR([
-          {
-            ALT: () => {
+      $.OR([
+        {
+          ALT: () => {
+            $.SUBRULE($$.RootComponentTypeList);
+            $.OPTION(() => {
+              $.CONSUME(COMMA);
               $.SUBRULE($$.ExtensionAndException);
-              $.SUBRULE($$.OptionalExtensionMarker);
-            },
+              $.SUBRULE($$.ExtensionAdditions);
+              // $.OR([
+              //   { ALT: () => $.SUBRULE($$.OptionalExtensionMarker) },
+              //   {
+              //     ALT: () => {
+              //       $.SUBRULE($$.ExtensionEndMarker);
+              //       $.CONSUME(COMMA);
+              //       $.SUBRULE($$.RootComponentTypeList);
+              //     },
+              //   },
+              // ]);
+            });
           },
-          {
-            ALT: () => $.SUBRULE($$.ComponentTypeLists),
-          },
-        ]);
-      });
+        },
+        { ALT: () => {} },
+      ]);
+      // $.OPTION(() => {
+      //   $.OR([
+      //     {
+      //       ALT: () => {
+      //         $.SUBRULE($$.ExtensionAndException);
+      //         $.SUBRULE($$.OptionalExtensionMarker);
+      //       },
+      //     },
+      //     {
+      //       ALT: () => $.SUBRULE($$.ComponentTypeLists),
+      //     },
+      //   ]);
+      // });
       $.CONSUME(CURLY_RIGHT);
     });
 
@@ -609,31 +658,31 @@ export class Asn1Parser extends CstParser {
      *     RootComponentTypeList
      * | ExtensionAndException ExtensionAdditions OptionalExtensionMarker
      */
-    $.RULE("ComponentTypeLists", () => {
-      $.OR([
-        { ALT: () => $.SUBRULE($$.RootComponentTypeList) },
-        {
-          ALT: () => {
-            $.OPTION(() => {
-              $.SUBRULE1($$.RootComponentTypeList);
-              $.CONSUME(COMMA);
-            });
-            $.SUBRULE($$.ExtensionAndException);
-            $.SUBRULE($$.ExtensionAdditions);
-            // $.OR([
-            //   { ALT: () => $.SUBRULE($$.OptionalExtensionMarker) },
-            //   {
-            //     ALT: () => {
-            //       $.SUBRULE($$.ExtensionEndMarker);
-            //       $.CONSUME(COMMA);
-            //       $.SUBRULE($$.RootComponentTypeList);
-            //     },
-            //   },
-            // ]);
-          },
-        },
-      ]);
-    });
+    // $.RULE("ComponentTypeLists", () => {
+    //   $.OR([
+    //     { ALT: () => $.SUBRULE($$.RootComponentTypeList) },
+    //     {
+    //       ALT: () => {
+    //         $.OPTION(() => {
+    //           $.SUBRULE1($$.RootComponentTypeList);
+    //           $.CONSUME(COMMA);
+    //         });
+    //         $.SUBRULE($$.ExtensionAndException);
+    //         $.SUBRULE($$.ExtensionAdditions);
+    //         // $.OR([
+    //         //   { ALT: () => $.SUBRULE($$.OptionalExtensionMarker) },
+    //         //   {
+    //         //     ALT: () => {
+    //         //       $.SUBRULE($$.ExtensionEndMarker);
+    //         //       $.CONSUME(COMMA);
+    //         //       $.SUBRULE($$.RootComponentTypeList);
+    //         //     },
+    //         //   },
+    //         // ]);
+    //       },
+    //     },
+    //   ]);
+    // });
 
     /**
      * RootComponentTypeList ::= ComponentTypeList
