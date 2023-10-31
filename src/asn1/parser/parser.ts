@@ -39,6 +39,7 @@ import {
   tokens,
   BIT_STRING_VALUE_QUOTED,
   SIZE,
+  HYPHEN_MINUS,
   word,
   objectclassreference,
 } from "./lexer";
@@ -509,10 +510,13 @@ export class Asn1Parser extends CstParser {
      * BuiltinValue ::=
      *   BitStringValue
      * ...
+     * | IntegerValue
+     * ...
      */
     $.RULE("BuiltinValue", () => {
       $.OR([
         { ALT: () => $.SUBRULE($$.BitStringValue) },
+        { ALT: () => $.SUBRULE($$.IntegerValue) },
         // Others are omitted
       ]);
     });
@@ -548,6 +552,28 @@ export class Asn1Parser extends CstParser {
       //   $.SUBRULE($$.NamedNumberList);
       //   $.CONSUME(CURLY_RIGHT);
       // });
+    });
+
+    /**
+     * SignedNumber ::=
+     *   number
+     * | "-" number
+     */
+    $.RULE("SignedNumber", () => {
+      $.OPTION(() => $.CONSUME(HYPHEN_MINUS));
+      $.CONSUME(number);
+    });
+
+    /**
+     * IntegerValue ::=
+     *   SingedNumber
+     * | identifier
+     */
+    $.RULE("IntegerValue", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.SignedNumber) },
+        // { ALT: () => $.CONSUME(identifier) },
+      ]);
     });
 
     /**
