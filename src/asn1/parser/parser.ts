@@ -95,7 +95,71 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("ModuleIdentifier", () => {
       $.CONSUME(typereference);
-      // $.SUBRULE($$.DefinitiveIdentification);
+      $.SUBRULE($$.DefinitiveIdentification);
+    });
+
+    /**
+     * DefinitiveIdentification ::=
+     * | DefinitiveOID
+     * | DefinitiveOIDandIRI
+     * | empty
+     */
+    $.RULE("DefinitiveIdentification", () => {
+      $.OPTION(() => {
+        $.OR([
+          { ALT: () => $.SUBRULE($$.DefinitiveOID) },
+          // Others are omitted
+        ]);
+      });
+    });
+
+    /**
+     * DefinitiveOID ::=
+     *   "{" DefinitiveObjIdComponentList "}"
+     */
+    $.RULE("DefinitiveOID", () => {
+      $.CONSUME(CURLY_LEFT);
+      $.SUBRULE($$.DefinitiveObjIdComponentList);
+      $.CONSUME(CURLY_RIGHT);
+    });
+
+    /**
+     * DefinitiveObjIdComponentList ::=
+     *   DefinitiveObjIdComponent
+     * | DefinitiveObjIdComponent DefinitiveObjIdComponentList
+     */
+    $.RULE("DefinitiveObjIdComponentList", () => {
+      $.AT_LEAST_ONE(() => $.SUBRULE($$.DefinitiveObjIdComponent));
+    });
+
+    /**
+     * DefinitiveObjIdComponent ::=
+     *   NameForm
+     * | DefinitiveNumberForm
+     * | DefinitiveNamdAndNumberForm
+     */
+    $.RULE("DefinitiveObjIdComponent", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.DefinitiveNameAndNumberForm) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * DefinitiveNumberForm ::= number
+     */
+    $.RULE("DefinitiveNumberForm", () => {
+      $.CONSUME(number);
+    });
+
+    /**
+     * DefinitiveNameAndNumberForm ::= identifier "(" DefinitiveNumberForm ")"
+     */
+    $.RULE("DefinitiveNameAndNumberForm", () => {
+      $.CONSUME(identifier);
+      $.CONSUME(PAREN_LEFT);
+      $.SUBRULE($$.DefinitiveNumberForm);
+      $.CONSUME(PAREN_RIGHT);
     });
 
     /**
