@@ -11,9 +11,6 @@ describe("ASN.1 lexer", () => {
   );
   for (let i = 0; i < asn1files.length; i++) {
     const asn1file = asn1files[i];
-    if (!asn1file.includes("36331")) {
-      continue;
-    }
     test(`Tokenize ${asn1file}`, () => {
       const content = readFileSync(
         resolve(__dirname, asn1ResourcePath, asn1file),
