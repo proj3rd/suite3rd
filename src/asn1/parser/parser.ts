@@ -42,36 +42,18 @@ import {
   HYPHEN_MINUS,
   OF,
   CLASS,
-  word,
-  objectclassreference,
   AMPERSAND,
 } from "./lexer";
 
-const unimpl = () => {
-  throw Error("unimplemented");
-};
+const is_word = (token: string) => token.match(/^[A-Z][A-Z]*(-[A-Z]+)*$/);
+const is_objectclassreference = (token: string) =>
+  token.match(/^[A-Z][A-Z0-9]*(-[A-Z0-9]+)*$/);
 
 export class Asn1Parser extends CstParser {
   constructor() {
     super(tokens);
     const $ = this;
     const $$ = $ as any;
-
-    /**
-     * Implementation hacks
-     */
-    $.RULE("Objectclassreference", () => {
-      $.OR([
-        { ALT: () => $.CONSUME(word) },
-        { ALT: () => $.CONSUME(objectclassreference) },
-      ]);
-    });
-    $.RULE("Typereference", () => {
-      $.OR([
-        { ALT: () => $.SUBRULE($$.Objectclassreference) },
-        { ALT: () => $.SUBRULE($$.Typereference) },
-      ]);
-    });
 
     /**
      * ModuleDefinitionList ::= ModuleDefinition+
@@ -116,7 +98,7 @@ export class Asn1Parser extends CstParser {
      *   DefinitiveIdentification
      */
     $.RULE("ModuleIdentifier", () => {
-      $.SUBRULE($$.Typereference);
+      $.CONSUME(typereference);
       $.SUBRULE($$.DefinitiveIdentification);
     });
 
@@ -267,7 +249,7 @@ export class Asn1Parser extends CstParser {
      *   modulereference AssignedIdentifier
      */
     $.RULE("GlobalModuleReference", () => {
-      $.SUBRULE($$.Typereference);
+      $.CONSUME(typereference);
       // $.SUBRULE($$.AssignedIdentifier)
     });
 
@@ -313,7 +295,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("Reference", () => {
       $.OR([
-        { ALT: () => $.SUBRULE($$.Typereference) },
+        { ALT: () => $.CONSUME(typereference) },
         // valuereference is equivalent to identifier
         { ALT: () => $.CONSUME(identifier) },
         // Others are omitted
@@ -362,7 +344,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("DefinedType", () => {
       $.OR([
-        { ALT: () => $.SUBRULE($$.Typereference) },
+        { ALT: () => $.CONSUME(typereference) },
         // Others are omitted
       ]);
     });
@@ -388,7 +370,7 @@ export class Asn1Parser extends CstParser {
      *   Type
      */
     $.RULE("TypeAssignment", () => {
-      $.SUBRULE($$.Typereference);
+      $.CONSUME(typereference);
       $.CONSUME(ASSIGNMENT);
       $.SUBRULE($$.Type);
     });
@@ -1254,7 +1236,7 @@ export class Asn1Parser extends CstParser {
      */
     $.RULE("typefieldreference", () => {
       $.CONSUME(AMPERSAND);
-      $.SUBRULE($$.Typereference);
+      $.CONSUME(typereference);
     });
 
     /**
@@ -1264,7 +1246,12 @@ export class Asn1Parser extends CstParser {
      *   ObjectClass
      */
     $.RULE("ObjectClassAssignment", () => {
-      $.SUBRULE($$.Objectclassreference);
+      const objectclassreference = $.CONSUME(typereference);
+      $.ACTION(() => {
+        if (!is_objectclassreference(objectclassreference.image)) {
+          throw Error("Left-hand side should not contain lower-case letters.");
+        }
+      });
       $.CONSUME(ASSIGNMENT);
       $.SUBRULE($$.ObjectClass);
     });
