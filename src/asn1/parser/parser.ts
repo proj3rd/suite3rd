@@ -771,15 +771,17 @@ export class Asn1Parser extends CstParser {
         {
           ALT: () => {
             $.SUBRULE($$.NamedType);
-            $.OR1([
-              { ALT: () => $.CONSUME(OPTIONAL) },
-              {
-                ALT: () => {
-                  $.CONSUME(DEFAULT);
-                  $.SUBRULE($$.Value);
+            $.OPTION(() => {
+              $.OR1([
+                { ALT: () => $.CONSUME(OPTIONAL) },
+                {
+                  ALT: () => {
+                    $.CONSUME(DEFAULT);
+                    $.SUBRULE($$.Value);
+                  },
                 },
-              },
-            ]);
+              ]);
+            });
           },
         },
         // Others are omitted
