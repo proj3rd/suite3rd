@@ -53,6 +53,14 @@ export const DBRACKET_RIGHT = createToken({
   name: "RIGHT DOUBLE SQUARE BRACKET",
   pattern: "]]",
 });
+export const BRACKET_LEFT = createToken({
+  name: "LEFT SQUARE BRACKET",
+  pattern: "[",
+});
+export const BRACKET_RIGHT = createToken({
+  name: "RIGHT SQUARE BRACKET",
+  pattern: "]",
+});
 export const ELLIPSIS = createToken({ name: "ELLIPSIS", pattern: "..." });
 export const RANGE_SEPARATOR = createToken({
   name: "RANGE SEPARATOR",
@@ -255,6 +263,8 @@ export const tokens = [
   FULL_STOP,
   DBRACKET_LEFT,
   DBRACKET_RIGHT,
+  BRACKET_LEFT,
+  BRACKET_RIGHT,
   END,
   ELLIPSIS,
   RANGE_SEPARATOR,
