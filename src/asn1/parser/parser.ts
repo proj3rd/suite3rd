@@ -1065,8 +1065,14 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
-     * Unions ::= Intersections
-     * |          UElems UnionMark Intersections
+     * Unions ::=
+     *   Intersections
+     * | UElems UnionMark Intersections
+     *
+     * NOTE: Modified to equivalent rule
+     * Unions ::=
+     *   Intersections
+     * | Unions UnionMark Intersections
      */
     $.RULE("Unions", () => {
       // Without left recursion
@@ -1075,24 +1081,6 @@ export class Asn1Parser extends CstParser {
         // TODO: Use UnionMark rule instead of VERTICAL_LinE token
         SEP: VERTICAL_LINE,
       });
-      // With left recursion
-      // $.OR([
-      //   { ALT: () => $.SUBRULE($$.Intersections) },
-      //   {
-      //     ALT: () => {
-      //       $.SUBRULE($$.UElems);
-      //       $.SUBRULE($$.UnionMark);
-      //       $.SUBRULE1($$.Intersections);
-      //     },
-      //   },
-      // ]);
-    });
-
-    /**
-     * UElems ::= Unions
-     */
-    $.RULE("UElems", () => {
-      $.SUBRULE($$.Unions);
     });
 
     /**
@@ -1112,16 +1100,6 @@ export class Asn1Parser extends CstParser {
     $.RULE("IntersectionElements", () => {
       $.OR([
         { ALT: () => $.SUBRULE($$.Elements) },
-        // Others are omitted
-      ]);
-    });
-
-    /**
-     * UnionMark ::= "|" | UNION
-     */
-    $.RULE("UnionMark", () => {
-      $.OR([
-        { ALT: () => $.CONSUME(VERTICAL_LINE) },
         // Others are omitted
       ]);
     });
