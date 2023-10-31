@@ -346,12 +346,18 @@ export class Asn1Parser extends CstParser {
      * | typereference
      * | ParameterizedType
      * | ParameterizedValueSetType
+     *
+     * TODO: ExternalTypeRefernece is omitted
+     * NOTE: ParameterizedValueSetType is equivalent to ParameterizedType
+     * NOTE: Modified to equivalent rule
+     * DefinedType ::=
+     *   typereference ActualParameterList?
      */
     $.RULE("DefinedType", () => {
-      $.OR([
-        { ALT: () => $.CONSUME(typereference) },
-        // Others are omitted
-      ]);
+      $.CONSUME(typereference);
+      $.OPTION(() => {
+        $.SUBRULE($$.ActualParameterList);
+      });
     });
 
     /**
@@ -918,7 +924,7 @@ export class Asn1Parser extends CstParser {
         $.CONSUME(COMMA);
         $.SUBRULE($$.ExtensionAndException);
         $.SUBRULE($$.ExtensionAdditionAlternatives);
-        $.SUBRULE($$.OptionalExtensionMarker);
+        // $.SUBRULE($$.OptionalExtensionMarker);
       });
     });
 
@@ -1383,6 +1389,22 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
+     * PrimitiveFieldName ::=
+     *   typefieldreference
+     * | valuefieldreference
+     * | valuesetfieldreference
+     * | objectfieldreference
+     * | objectsetfieldreference
+     */
+    $.RULE("PrimitiveFieldName", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.typefieldreference) },
+        { ALT: () => $.SUBRULE($$.valuefieldreference) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
      * SyntaxList ::= "{" TokenOrGroupSpec empty + "}"
      */
     $.RULE("SyntaxList", () => {
@@ -1442,17 +1464,26 @@ export class Asn1Parser extends CstParser {
     });
 
     /**
-     * PrimitiveFieldName ::=
-     *   typefieldreference
-     * | valuefieldreference
-     * | valuesetfieldreference
-     * | objectfieldreference
-     * | objectsetfieldreference
+     * ObjectSet ::=
+     *   "{" ObjectSetSpec "}"
      */
-    $.RULE("PrimitiveFieldName", () => {
+    $.RULE("ObjectSet", () => {
+      $.CONSUME(CURLY_LEFT);
+      $.SUBRULE($$.ObjectSetSpec);
+      $.CONSUME(CURLY_RIGHT);
+    });
+
+    /**
+     * ObjectSetSpec ::=
+     *   RootElementSetSpec
+     * | RootElementSetSpec "," "..."
+     * | "..."
+     * | "..." "," AdditionalElementSetSpec
+     * | RootElementSetSpec "," "..." AdditionalElementSetSpec
+     */
+    $.RULE("ObjectSetSpec", () => {
       $.OR([
-        { ALT: () => $.SUBRULE($$.typefieldreference) },
-        { ALT: () => $.SUBRULE($$.valuefieldreference) },
+        { ALT: () => $.SUBRULE($$.RootElementSetSpec) },
         // Others are omitted
       ]);
     });
@@ -1474,6 +1505,51 @@ export class Asn1Parser extends CstParser {
     //     $.CONSUME(CURLY_RIGHT );
     //   });
     // });
+
+    /**
+     * SimpleDefinedType ::=
+     *   ExternalTypeReference
+     * | typereference
+     */
+    $.RULE("SimpleDefinedType", () => {
+      $.OR([
+        { ALT: () => $.CONSUME(typereference) },
+        // Others are omitted
+      ]);
+    });
+
+    /**
+     * ParameterizedType ::=
+     *   SimpleDefinedType ActualParameterList
+     */
+    $.RULE("ParameterizedType", () => {
+      $.SUBRULE($$.SimpleDefinedType);
+      $.SUBRULE($$.ActualParameterList);
+    });
+
+    /**
+     * ActualParameterList ::=
+     *   "{" ActualParameter "," + "}"
+     */
+    $.RULE("ActualParameterList", () => {
+      $.CONSUME(CURLY_LEFT);
+      $.AT_LEAST_ONE_SEP({
+        DEF: () => $.SUBRULE($$.ActualParameter),
+        SEP: COMMA,
+      });
+      $.CONSUME(CURLY_RIGHT);
+    });
+
+    /**
+     * ActualParameter ::=
+     *   Type | Value | ValueSet | DefinedObjectClass | Object | ObjectSet
+     */
+    $.RULE("ActualParameter", () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($$.ObjectSet) },
+        // Others are omitted
+      ]);
+    });
 
     this.performSelfAnalysis();
   }
