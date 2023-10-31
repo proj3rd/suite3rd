@@ -354,6 +354,7 @@ export class Asn1Parser extends CstParser {
       $.OR([
         // valuereference is equivalent to identifier
         { ALT: () => $.CONSUME(identifier) },
+        // Others are omitted
       ]);
     });
 
@@ -982,14 +983,17 @@ export class Asn1Parser extends CstParser {
      *   SET Constraint OF Type
      * | SET SizeConstraint OF Type
      * | SEQUENCE Constraint OF Type
-     * | SEQUENCE SizeConstraint Of Type
+     * | SEQUENCE SizeConstraint OF Type
      * | SET Constraint OF NamedType
      * | SET SizeConstraint OF NamedType
      * | SEQUENCE Constraint OF NamedType
      * | SEQUENCE SizeConstraint Of NamedType
      */
     $.RULE("TypeWithConstraint", () => {
-      $.OR([{ ALT: () => $.CONSUME(SEQUENCE) }]);
+      $.OR([
+        { ALT: () => $.CONSUME(SEQUENCE) },
+        // Others are omitted
+      ]);
       $.OR1([
         { ALT: () => $.SUBRULE($$.Constraint) },
         // { ALT: () => $.SUBRULE($$.SizeConstraint) },
