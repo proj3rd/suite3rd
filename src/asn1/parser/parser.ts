@@ -998,6 +998,7 @@ export class Asn1Parser extends CstParser {
         { ALT: () => $.SUBRULE($$.Constraint) },
         // { ALT: () => $.SUBRULE($$.SizeConstraint) },
       ]);
+      $.CONSUME(OF);
       $.OR2([
         { ALT: () => $.SUBRULE($$.Type) },
         { ALT: () => $.SUBRULE($$.NamedType) },
