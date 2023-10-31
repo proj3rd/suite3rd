@@ -38,6 +38,7 @@ import {
   typereference,
   tokens,
   BIT_STRING_VALUE_QUOTED,
+  SIZE,
 } from "./lexer";
 
 const unimpl = () => {
@@ -1073,12 +1074,15 @@ export class Asn1Parser extends CstParser {
      * ...
      * | ValueRange
      * ...
+     * | SizeConstraint
+     * ...
      */
     $.RULE("SubtypeElements", () => {
       $.OR([
         // ValueRange has longer match than SingleValue
         { ALT: () => $.SUBRULE($$.ValueRange) },
         { ALT: () => $.SUBRULE($$.SingleValue) },
+        { ALT: () => $.SUBRULE($$.SizeConstraint) },
         // Others are omitted
       ]);
     });
@@ -1133,6 +1137,14 @@ export class Asn1Parser extends CstParser {
         { ALT: () => $.SUBRULE($$.Value) },
         // Others are omitted
       ]);
+    });
+
+    /**
+     * SizeConstraint ::= SIZE Constraint
+     */
+    $.RULE("SizeConstraint", () => {
+      $.CONSUME(SIZE);
+      $.SUBRULE($$.Constraint);
     });
 
     this.performSelfAnalysis();
