@@ -267,12 +267,18 @@ export class Asn1Parser extends CstParser {
      * Symbol ::=
      *   Reference
      * | ParameterizedReference
+     *
+     * NOTE: Modified to equivalent rule
+     * Symbol ::=
+     *   Reference
+     * | Reference "{" "}"
      */
     $.RULE("Symbol", () => {
-      $.OR([
-        { ALT: () => $.SUBRULE($$.Reference) },
-        // { ALT: () => $.SUBRULE($$.ParameterizedReference) },
-      ]);
+      $.SUBRULE($$.Reference);
+      $.OPTION(() => {
+        $.CONSUME(CURLY_LEFT);
+        $.CONSUME(CURLY_RIGHT);
+      });
     });
 
     /**
@@ -1211,6 +1217,24 @@ export class Asn1Parser extends CstParser {
       $.CONSUME(SIZE);
       $.SUBRULE($$.Constraint);
     });
+
+    /**
+     * X.683
+     */
+
+    /**
+     * ParameterizedReference ::=
+     *   Reference | Reference "{" "}"
+     *
+     * NOTE: Merged to Symbol
+     */
+    // $.RULE("ParameterizedReference", () => {
+    //   $.SUBRULE($$.Reference);
+    //   $.OPTION(() => {
+    //     $.CONSUME(CURLY_LEFT);
+    //     $.CONSUME(CURLY_RIGHT );
+    //   });
+    // });
 
     this.performSelfAnalysis();
   }
