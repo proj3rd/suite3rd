@@ -621,8 +621,23 @@ export class Asn1Parser extends CstParser {
      * Enumeration ::= EnumerationItem | EnumerationItem "," Enumeration
      */
     $.RULE("Enumeration", () => {
+      let ellipsisFound = false;
       $.AT_LEAST_ONE_SEP({
-        DEF: () => $.SUBRULE($$.EnumerationItem),
+        DEF: () => {
+          $.OR([
+            {
+              GATE: () => !ellipsisFound,
+              ALT: () => $.SUBRULE($$.EnumerationItem),
+            },
+            {
+              GATE: () => !ellipsisFound,
+              ALT: () => {
+                $.CONSUME(ELLIPSIS);
+                ellipsisFound = true;
+              },
+            },
+          ]);
+        },
         SEP: COMMA,
       });
     });
