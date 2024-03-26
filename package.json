@@ -9,6 +9,8 @@
     }
   },
   "scripts": {
+    "build": "npm run build:esm && npm run build:doc",
+    "build:doc": "npx typedoc src/index.ts",
     "build:esm": "npx tsc -p tsconfig.esm.json"
   },
   "keywords": [],
