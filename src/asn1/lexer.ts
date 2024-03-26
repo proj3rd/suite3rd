@@ -15,10 +15,6 @@ export class Lexer {
     this.line = 1;
   }
 
-  get tokens(): Token[] {
-    return [...this._tokens];
-  }
-
   scanTokens(): Token[] {
     while (!this.isAtEnd()) {
       this.start = this.current;
