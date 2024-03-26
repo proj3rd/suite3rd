@@ -1,6 +1,6 @@
-import { Token } from "./token";
-import { TokenType } from "./tokenType";
-import { RESERVED_WORDS } from "./reservedWords";
+import { Token } from "./token.js";
+import { TokenType } from "./tokenType.js";
+import { RESERVED_WORDS } from "./reservedWords.js";
 
 export class Lexer {
   private start: number;
@@ -102,7 +102,7 @@ export class Lexer {
   }
 
   private advance(): string {
-    return this.content[this.current++];
+    return this.content[this.current++]!;
   }
 
   private match(expected: string): boolean {
@@ -120,14 +120,14 @@ export class Lexer {
     if (this.isAtEnd()) {
       return null;
     }
-    return this.content[this.current];
+    return this.content[this.current]!;
   }
 
   private peekNext(): string | null {
     if (this.current + 1 >= this.content.length) {
       return null;
     }
-    return this.content[this.current + 1];
+    return this.content[this.current + 1]!;
   }
 
   private comment() {

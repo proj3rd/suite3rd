@@ -1,4 +1,4 @@
-import { TokenType } from "./tokenType";
+import { TokenType } from "./tokenType.js";
 
 export const RESERVED_WORDS: { [key: string]: TokenType } = {
   AUTOMATIC: TokenType.Automatic,
