@@ -83,6 +83,12 @@ export class Lexer {
     if (this.isUpper(c)) {
       return this.typeReference();
     }
+    if (c === "0") {
+      return this.addToken(TokenType.Number);
+    }
+    if (this.isDigit(c)) {
+      return this.number();
+    }
     if (c === " " || c === "\t" || c === "\r") {
       return;
     }
@@ -159,6 +165,20 @@ export class Lexer {
       this.advance();
     }
     this.addToken(TokenType.Identifier);
+  }
+
+  private number() {
+    while (true) {
+      const c = this.peek();
+      if (c === null) {
+        break;
+      }
+      if (!this.isDigit(c)) {
+        break;
+      }
+      this.advance();
+    }
+    this.addToken(TokenType.Number);
   }
 
   private typeReference() {
