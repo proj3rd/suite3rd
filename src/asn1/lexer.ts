@@ -13,6 +13,7 @@ export class Lexer {
     this.start = 0;
     this.current = 0;
     this.line = 1;
+    this.column = 1;
   }
 
   scanTokens(): Token[] {
@@ -87,7 +88,8 @@ export class Lexer {
     }
     if (c === "\n") {
       this.line++;
-      this.column = 0;
+      this.column = 1;
+      return;
     }
     // TODO: Raise and report error
     throw new Error("Unexpected character: " + c);
