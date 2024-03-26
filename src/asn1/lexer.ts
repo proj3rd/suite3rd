@@ -1,17 +1,22 @@
 import { Token } from "./token";
 import { TokenType } from "./tokenType";
+import { RESERVED_WORDS } from "./reservedWords";
 
 export class Lexer {
   private start: number;
   private current: number;
   private line: number;
   private column: number;
-  private tokens: Token[] = [];
+  private _tokens: Token[] = [];
 
   constructor(private content: string) {
     this.start = 0;
     this.current = 0;
     this.line = 1;
+  }
+
+  get tokens(): Token[] {
+    return [...this._tokens];
   }
 
   scanTokens(): Token[] {
@@ -20,7 +25,7 @@ export class Lexer {
       this.scanToken();
     }
     this.addToken(TokenType.EOF);
-    return this.tokens;
+    return this._tokens;
   }
 
   private scanToken() {
@@ -46,7 +51,7 @@ export class Lexer {
       if (!this.match("-")) {
         return this.addToken(TokenType.HyphenMinus);
       }
-      // TODO: Comment
+      return this.comment();
     }
     if (c === "(") {
       return this.addToken(TokenType.ParenthesisLeft);
@@ -75,7 +80,19 @@ export class Lexer {
       }
       return this.addToken(TokenType.VersionBracketRight);
     }
-    // TODO: TypeReference, Identifier and other reserved words
+    if (this.isLower(c)) {
+      return this.identifier();
+    }
+    if (this.isUpper(c)) {
+      return this.typeReference();
+    }
+    if (c === " " || c === "\t" || c === "\r") {
+      return;
+    }
+    if (c === "\n") {
+      this.line++;
+      this.column = 0;
+    }
     // TODO: Raise and report error
     throw new Error("Unexpected character: " + c);
   }
@@ -95,9 +112,94 @@ export class Lexer {
     return true;
   }
 
+  private peek(): string | null {
+    if (this.isAtEnd()) {
+      return null;
+    }
+    return this.content[this.current];
+  }
+
+  private peekNext(): string | null {
+    if (this.current + 1 >= this.content.length) {
+      return null;
+    }
+    return this.content[this.current + 1];
+  }
+
+  private comment() {
+    while (true) {
+      if (this.isAtEnd()) {
+        break;
+      }
+      if (this.peek() === "\n") {
+        break;
+      }
+      if (this.peek() === "-" && this.peekNext() === "-") {
+        this.advance();
+        this.advance();
+        break;
+      }
+      this.advance();
+    }
+    this.addToken(TokenType.Comment);
+  }
+
+  private identifier() {
+    while (true) {
+      const c = this.peek();
+      if (c === null) {
+        break;
+      }
+      if (
+        !this.isUpper(c) &&
+        !this.isLower(c) &&
+        !this.isDigit(c) &&
+        c !== "-"
+      ) {
+        break;
+      }
+      this.advance();
+    }
+    this.addToken(TokenType.Identifier);
+  }
+
+  private typeReference() {
+    while (true) {
+      const c = this.peek();
+      if (c === null) {
+        break;
+      }
+      if (
+        !this.isUpper(c) &&
+        !this.isLower(c) &&
+        !this.isDigit(c) &&
+        c !== "-"
+      ) {
+        break;
+      }
+      this.advance();
+    }
+    const lexeme = this.content.substring(this.start, this.current);
+    const tokenType = RESERVED_WORDS[lexeme] ?? TokenType.TypeReference;
+    this.addToken(tokenType);
+  }
+
   private addToken(type: TokenType) {
     const lexeme = this.content.substring(this.start, this.current);
-    this.tokens.push(new Token(type, lexeme, this.line, this.column));
+    this._tokens.push(new Token(type, lexeme, this.line, this.column));
+    this.column += this.current - this.start;
+  }
+
+  private isDigit(c: string): boolean {
+    return c >= "0" && c <= "9";
+  }
+
+  private isLower(c: string): boolean {
+    return c >= "a" && c <= "z";
+  }
+
+  private isUpper(c: string): boolean {
+    return c >= "A" && c <= "Z";
   }
 
   private isAtEnd(): boolean {
