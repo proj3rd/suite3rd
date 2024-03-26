@@ -1,0 +1,23 @@
+// X.680 clause 12 ASN.1 lexical items
+export enum TokenType {
+  Assignment,
+  BracketLeft,
+  BracketRight,
+  Colon,
+  Comma,
+  Comment,
+  CurlyBraceLeft,
+  CurlyBraceRight,
+  Ellipsis,
+  HyphenMinus,
+  Identifier,
+  Number,
+  ParenthesisLeft,
+  ParenthesisRight,
+  Period,
+  RangeSeparator,
+  TypeReference,
+  VersionBracketLeft,
+  VersionBracketRight,
+  EOF,
+}
