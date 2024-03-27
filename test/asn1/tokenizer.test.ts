@@ -3,7 +3,7 @@ import { tokenize } from "../../src/asn1/tokenizer";
 import { TokenType } from "../../src/asn1/tokenType";
 
 describe("ASN.1 lexer", () => {
-  it("Should lex ASN.1 definition", () => {
+  it("Should tokenize ASN.1 definition", () => {
     const content = `
 Type-R3ference i-d3ntifier -- comment 1
 -- comment 2 -- 0 123 ::= .. ... [[ ]] { } , . ( ) [ ] - : ; @ |
@@ -142,5 +142,11 @@ UTF8String VideotexString VisibleString WITH
       TokenType.With,
       TokenType.EOF,
     ]);
+  });
+
+  it("Should not tokenize number with leading zero", () => {
+    const content = "0123";
+    const tokens = tokenize(content);
+    expect(tokens).toHaveLength(1);
   });
 });

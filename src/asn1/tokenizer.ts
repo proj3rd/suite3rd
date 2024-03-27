@@ -83,9 +83,6 @@ export function tokenize(content: string): Token[] {
     if (isUpper(c)) {
       return typeReference();
     }
-    if (c === "0") {
-      return addToken(TokenType.Number);
-    }
     if (isDigit(c)) {
       return number();
     }
@@ -97,12 +94,7 @@ export function tokenize(content: string): Token[] {
       column = 1;
       return;
     }
-    // TODO: Raise and report error
-    console.error(
-      `[${line.toString().padStart(6)}:${column
-        .toString()
-        .padStart(4)} Unexpected character: ${c}] Unexpected character: ${c}`
-    );
+    error(`Unexpected character: ${c}] Unexpected character: ${c}`);
   }
 
   function advance(): string {
@@ -177,6 +169,9 @@ export function tokenize(content: string): Token[] {
       }
       advance();
     }
+    if (content[start] === "0" && current - start > 1) {
+      return error(`Number cannot start with 0`);
+    }
     addToken(TokenType.Number);
   }
 
@@ -216,5 +211,14 @@ export function tokenize(content: string): Token[] {
 
   function isAtEnd(): boolean {
     return current >= content.length;
+  }
+
+  function error(message: string) {
+    // TODO: Raise and report error
+    console.error(
+      `[${line.toString().padStart(6)}:${column
+        .toString()
+        .padStart(4)}] ${message}`
+    );
   }
 }
