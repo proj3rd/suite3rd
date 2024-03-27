@@ -26,6 +26,15 @@ export function tokenize(content: string): Token[] {
         return addToken(TokenType.Assignment);
       }
     }
+    if (c === ";") {
+      return addToken(TokenType.Semicolon);
+    }
+    if (c === "@") {
+      return addToken(TokenType.AtSign);
+    }
+    if (c === "|") {
+      return addToken(TokenType.VerticalBar);
+    }
     if (c === ",") {
       return addToken(TokenType.Comma);
     }
@@ -89,7 +98,11 @@ export function tokenize(content: string): Token[] {
       return;
     }
     // TODO: Raise and report error
-    throw new Error("Unexpected character: " + c);
+    console.error(
+      `[${line.toString().padStart(6)}:${column
+        .toString()
+        .padStart(4)} Unexpected character: ${c}] Unexpected character: ${c}`
+    );
   }
 
   function advance(): string {
