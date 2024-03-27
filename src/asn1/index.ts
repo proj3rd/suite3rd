@@ -1,2 +1,2 @@
 export { extract } from "./extractor.js";
-export { Lexer } from "./lexer.js";
+export { tokenize } from "./tokenizer.js";

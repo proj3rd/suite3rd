@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { Lexer } from "../../src/asn1/lexer";
+import { tokenize } from "../../src/asn1/tokenizer";
 import { TokenType } from "../../src/asn1/tokenType";
 
 describe("ASN.1 lexer", () => {
@@ -9,8 +9,7 @@ describe("ASN.1 lexer", () => {
 AUTOMATIC BEGIN BIT BOOLEAN CHOICE CONTAINING DEFAULT DEFINITIONS
 END ENUMERATED EXPORTS FROM IMPORTS INTEGER NULL OCTET OF OPTIONAL
 SEQUENCE SIZE STRING TRUE UNIQUE WITH`;
-    const lexer = new Lexer(content);
-    const tokens = lexer.scanTokens();
+    const tokens = tokenize(content);
     const tokenTypes = tokens.map((token) => token.type);
     expect(tokenTypes).toEqual([
       TokenType.Assignment,
