@@ -1,7 +1,6 @@
 export var TokenType;
 (function (TokenType) {
     TokenType[TokenType["EOF"] = 0] = "EOF";
-    // Token types are defined in the same order as in X.680 clause 12
     TokenType[TokenType["TypeReference"] = 1] = "TypeReference";
     TokenType[TokenType["Identifier"] = 2] = "Identifier";
     TokenType[TokenType["ValueReference"] = 3] = "ValueReference";
@@ -58,7 +57,6 @@ export var TokenType;
     TokenType[TokenType["VerticalBar"] = 54] = "VerticalBar";
     TokenType[TokenType["ExclamationMark"] = 55] = "ExclamationMark";
     TokenType[TokenType["Caret"] = 56] = "Caret";
-    // Reserved words
     TokenType[TokenType["Absent"] = 57] = "Absent";
     TokenType[TokenType["AbstractSyntax"] = 58] = "AbstractSyntax";
     TokenType[TokenType["All"] = 59] = "All";

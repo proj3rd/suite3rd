@@ -1,4 +1,3 @@
-// These functions return a 'fresh' regular expression each time they are called
 const DELIM_1 = () => ({
     start: /^\s*?-- ASN1START\s*?$/gm,
     stop: /^\s*?-- ASN1STOP\s*?$/gm,
@@ -32,9 +31,6 @@ function detectDelimiter(content) {
     }
     return undefined;
 }
-/**
- * Extract ASN.1 definition from text
- */
 export function extract(content) {
     const delimiters = detectDelimiter(content);
     if (!delimiters) {

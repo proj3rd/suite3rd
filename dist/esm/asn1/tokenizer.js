@@ -198,7 +198,6 @@ export function tokenize(content) {
         return current >= content.length;
     }
     function error(message) {
-        // TODO: Raise and report error
         console.error(`[${line.toString().padStart(6)}:${column
             .toString()
             .padStart(4)}] ${message}`);
