@@ -14,6 +14,9 @@
     "build:esm": "npx tsc --build --clean tsconfig.esm.json && npx tsc -p tsconfig.esm.json",
     "test": "npx vitest"
   },
+  "bin": {
+    "extract-asn1": "./dist/esm/bin/extract-asn1.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
