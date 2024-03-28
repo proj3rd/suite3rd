@@ -41,12 +41,15 @@ async function main() {
       const optionalMemberList = memberList.filter(([, name]) =>
         name.endsWith("?")
       );
+      const optionalMemberDeclarations = optionalMemberList
+        .map(([type, name]) => `public readonly ${name}: ${type};`)
+        .join("\n");
       const optionalConstructorParams = optionalMemberList
         .map(([, name]) => name.replace("?", ""))
         .join(",");
       const optionalConstructorParamTypes = optionalMemberList
         .map(([type, name]) => `${name}: ${type}`)
-        .join(",");
+        .join(";");
       const constructorParamList = [];
       if (mandatoryMemberList.length > 0) {
         constructorParamList.push(mandatoryConstructorParams);
@@ -64,6 +67,7 @@ async function main() {
         .join("\n");
       const constructorParams = constructorParamList.join(",");
       const classDefinition = `export class ${className} {
+        ${optionalMemberDeclarations}
         constructor(${constructorParams}){
             ${optionalAssignments}
         }
