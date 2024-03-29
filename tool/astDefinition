@@ -14,4 +14,10 @@ BitStringType: NamedBit[] namedBitList?, Object constraint?
 NamedBit: Token name, Object value
 OctetStringType: Object constraint?
 NullType:
+SequenceType: Object[] rootComponentTypeList?, ExtensionAndException extensionAndException?, Object[] extensionAdditions?, EndMarker endMarker?, Object[] rootComponentTypeList2?
+ExtensionAndException:
+EndMarker:
+ExtensionAdditionGroup: Token versionNumber?, Object[] componentTypeList
+NamedTypeWithMarks: NamedType namedType, boolean isOptional?, Object defaultValue?
+ComponentsOfType: Object type
 ExceptionSpec:

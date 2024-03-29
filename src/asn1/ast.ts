@@ -137,6 +137,70 @@ export class NullType {
   constructor() {}
 }
 
+export class SequenceType {
+  public readonly rootComponentTypeList?: Object[];
+  public readonly extensionAndException?: ExtensionAndException;
+  public readonly extensionAdditions?: Object[];
+  public readonly endMarker?: EndMarker;
+  public readonly rootComponentTypeList2?: Object[];
+  constructor({
+    rootComponentTypeList,
+    extensionAndException,
+    extensionAdditions,
+    endMarker,
+    rootComponentTypeList2,
+  }: {
+    rootComponentTypeList?: Object[];
+    extensionAndException?: ExtensionAndException;
+    extensionAdditions?: Object[];
+    endMarker?: EndMarker;
+    rootComponentTypeList2?: Object[];
+  }) {
+    this.rootComponentTypeList = rootComponentTypeList;
+    this.extensionAndException = extensionAndException;
+    this.extensionAdditions = extensionAdditions;
+    this.endMarker = endMarker;
+    this.rootComponentTypeList2 = rootComponentTypeList2;
+  }
+}
+
+export class ExtensionAndException {
+  constructor() {}
+}
+
+export class EndMarker {
+  constructor() {}
+}
+
+export class ExtensionAdditionGroup {
+  public readonly versionNumber?: Token;
+  constructor(
+    public readonly componentTypeList: Object[],
+    { versionNumber }: { versionNumber?: Token },
+  ) {
+    this.versionNumber = versionNumber;
+  }
+}
+
+export class NamedTypeWithMarks {
+  public readonly isOptional?: boolean;
+  public readonly defaultValue?: Object;
+  constructor(
+    public readonly namedType: NamedType,
+    {
+      isOptional,
+      defaultValue,
+    }: { isOptional?: boolean; defaultValue?: Object },
+  ) {
+    this.isOptional = isOptional;
+    this.defaultValue = defaultValue;
+  }
+}
+
+export class ComponentsOfType {
+  constructor(public readonly type: Object) {}
+}
+
 export class ExceptionSpec {
   constructor() {}
 }
