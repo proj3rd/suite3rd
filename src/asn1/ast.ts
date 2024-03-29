@@ -201,6 +201,16 @@ export class ComponentsOfType {
   constructor(public readonly type: Object) {}
 }
 
+export class SequenceOfType {
+  public readonly constraint?: Object;
+  constructor(
+    public readonly type: Object,
+    { constraint }: { constraint?: Object },
+  ) {
+    this.constraint = constraint;
+  }
+}
+
 export class ExceptionSpec {
   constructor() {}
 }

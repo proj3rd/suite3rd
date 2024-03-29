@@ -20,4 +20,5 @@ EndMarker:
 ExtensionAdditionGroup: Token versionNumber?, Object[] componentTypeList
 NamedTypeWithMarks: NamedType namedType, boolean isOptional?, Object defaultValue?
 ComponentsOfType: Object type
+SequenceOfType: Object type, Object constraint?
 ExceptionSpec:
