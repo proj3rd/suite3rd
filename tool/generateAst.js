@@ -32,7 +32,9 @@ async function main() {
         .map((part) => part.trim());
       const memberList = members
         .split(",")
-        .map((member) => member.trim().split(" "));
+        .map((member) => member.trim())
+        .filter(Boolean)
+        .map((member) => member.split(" "));
       const mandatoryMemberList = memberList.filter(
         ([, name]) => !name.endsWith("?")
       );
