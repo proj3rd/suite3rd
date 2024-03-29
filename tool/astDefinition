@@ -3,3 +3,15 @@ SymbolsFromModule: GlobalModuleReference globalModuleReference, Asn1Symbol[] sym
 GlobalModuleReference: Token reference
 Asn1Symbol: Reference reference
 Reference: Token reference, Boolean isParameterized?
+TypeAssignment: Token name, Object type
+ValueAssignment: Token name, Object type, Object value
+NamedType: Token name, Object type
+BooleanType:
+IntegerType: Object constraint?
+EnumeratedType: EnumerationItem[] rootEnumeraiton, ExceptionSpec exceptionSpec?, EnumerationItem[] additionalEnumeration?
+EnumerationItem: Token name, Object value?
+BitStringType: NamedBit[] namedBitList?, Object constraint?
+NamedBit: Token name, Object value
+OctetStringType: Object constraint?
+NullType:
+ExceptionSpec:

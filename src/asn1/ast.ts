@@ -42,3 +42,101 @@ export class Reference {
     this.isParameterized = isParameterized;
   }
 }
+
+export class TypeAssignment {
+  constructor(
+    public readonly name: Token,
+    public readonly type: Object,
+  ) {}
+}
+
+export class ValueAssignment {
+  constructor(
+    public readonly name: Token,
+    public readonly type: Object,
+    public readonly value: Object,
+  ) {}
+}
+
+export class NamedType {
+  constructor(
+    public readonly name: Token,
+    public readonly type: Object,
+  ) {}
+}
+
+export class BooleanType {
+  constructor() {}
+}
+
+export class IntegerType {
+  public readonly constraint?: Object;
+  constructor({ constraint }: { constraint?: Object }) {
+    this.constraint = constraint;
+  }
+}
+
+export class EnumeratedType {
+  public readonly exceptionSpec?: ExceptionSpec;
+  public readonly additionalEnumeration?: EnumerationItem[];
+  constructor(
+    public readonly rootEnumeraiton: EnumerationItem[],
+    {
+      exceptionSpec,
+      additionalEnumeration,
+    }: {
+      exceptionSpec?: ExceptionSpec;
+      additionalEnumeration?: EnumerationItem[];
+    },
+  ) {
+    this.exceptionSpec = exceptionSpec;
+    this.additionalEnumeration = additionalEnumeration;
+  }
+}
+
+export class EnumerationItem {
+  public readonly value?: Object;
+  constructor(
+    public readonly name: Token,
+    { value }: { value?: Object },
+  ) {
+    this.value = value;
+  }
+}
+
+export class BitStringType {
+  public readonly namedBitList?: NamedBit[];
+  public readonly constraint?: Object;
+  constructor({
+    namedBitList,
+    constraint,
+  }: {
+    namedBitList?: NamedBit[];
+    constraint?: Object;
+  }) {
+    this.namedBitList = namedBitList;
+    this.constraint = constraint;
+  }
+}
+
+export class NamedBit {
+  constructor(
+    public readonly name: Token,
+    public readonly value: Object,
+  ) {}
+}
+
+export class OctetStringType {
+  public readonly constraint?: Object;
+  constructor({ constraint }: { constraint?: Object }) {
+    this.constraint = constraint;
+  }
+}
+
+export class NullType {
+  constructor() {}
+}
+
+export class ExceptionSpec {
+  constructor() {}
+}
