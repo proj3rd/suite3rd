@@ -1,1 +1,5 @@
 ModuleDefinition: Token moduleName, Token tagDefault?, SymbolsFromModule[] imports?, Object[] assignmentList
+SymbolsFromModule: GlobalModuleReference globalModuleReference, Asn1Symbol[] symbolList
+GlobalModuleReference: Token reference
+Asn1Symbol: Reference reference
+Reference: Token reference, Boolean isParameterized?
