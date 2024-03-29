@@ -214,3 +214,35 @@ export class SequenceOfType {
 export class ExceptionSpec {
   constructor() {}
 }
+
+export class ChoiceType {
+  public readonly extensionAndException?: ExtensionAndException;
+  public readonly extensionAdditionAlternatives?: Object[];
+  public readonly endMarker?: EndMarker;
+  constructor(
+    public readonly rootAlternativeTypeList: NamedType[],
+    {
+      extensionAndException,
+      extensionAdditionAlternatives,
+      endMarker,
+    }: {
+      extensionAndException?: ExtensionAndException;
+      extensionAdditionAlternatives?: Object[];
+      endMarker?: EndMarker;
+    },
+  ) {
+    this.extensionAndException = extensionAndException;
+    this.extensionAdditionAlternatives = extensionAdditionAlternatives;
+    this.endMarker = endMarker;
+  }
+}
+
+export class ExtensionAdditionAlternativeGroup {
+  public readonly versionNumber?: Token;
+  constructor(
+    public readonly componentTypeList: NamedType[],
+    { versionNumber }: { versionNumber?: Token },
+  ) {
+    this.versionNumber = versionNumber;
+  }
+}

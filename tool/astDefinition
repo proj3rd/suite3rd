@@ -22,3 +22,5 @@ NamedTypeWithMarks: NamedType namedType, boolean isOptional?, Object defaultValu
 ComponentsOfType: Object type
 SequenceOfType: Object type, Object constraint?
 ExceptionSpec:
+ChoiceType: NamedType[] rootAlternativeTypeList, ExtensionAndException extensionAndException?, Object[] extensionAdditionAlternatives?, EndMarker endMarker?
+ExtensionAdditionAlternativeGroup: Token versionNumber?, NamedType[] componentTypeList
