@@ -9,6 +9,7 @@
     }
   },
   "scripts": {
+    "ast": "node tool/generateAst.js",
     "build": "npm run build:esm && npm run build:doc",
     "build:doc": "npx typedoc --cleanOutputDir src/index.ts",
     "build:esm": "npx tsc --build --clean tsconfig.esm.json && npx tsc -p tsconfig.esm.json",
