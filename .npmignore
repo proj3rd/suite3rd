@@ -1,0 +1,6 @@
+.vscode
+bin
+docs
+src
+test
+tsconfig*.json
