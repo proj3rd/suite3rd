@@ -24,9 +24,7 @@
   },
   "homepage": "https://github.com/proj3rd/suite3rd/blob/main/bin/get-3gpp-spec#readme",
   "devDependencies": {
-    "@types/node": "^18.8.0",
-    "shx": "^0.3.4",
-    "typescript": "^4.8.4"
+    "shx": "^0.3.4"
   },
   "dependencies": {
     "basic-ftp": "^5.0.2"
