@@ -2,7 +2,7 @@
 
 import { readFileSync } from "node:fs";
 import { argv, exit } from "node:process";
-import { extract } from "../asn1/extractor.js";
+import { extract } from "@lib/asn1/extractor";
 
 function main() {
   const [, , path] = argv;

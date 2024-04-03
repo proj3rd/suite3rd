@@ -1,0 +1,24 @@
+{
+  "name": "extract-asn1",
+  "private": true,
+  "version": "3.0.0",
+  "description": "",
+  "main": "dist/cli.js",
+  "bin": {
+    "extract-asn1": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "npx webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/proj3rd/suite3rd.git"
+  },
+  "keywords": [],
+  "author": "Seokseong Jeon <sjeon87@gmail.com> (https://github.com/proj3rd)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/proj3rd/suite3rd/issues"
+  },
+  "homepage": "https://github.com/proj3rd/suite3rd/blob/main/app/extract-asn1#readme"
+}
