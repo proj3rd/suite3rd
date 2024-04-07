@@ -37,10 +37,16 @@ function detectDelimiter(content: string) {
   return undefined;
 }
 
+type ExtractOptions = {
+  excludeNonTagComment?: boolean;
+};
+
 /**
  * Extract ASN.1 definition from text
+ * @param options Extractor options object
+ * - `excludeNonTagComment`: (Optional) booelan. If true, exclude 3GPP non-tag comment
  */
-export function extract(content: string) {
+export function extract(content: string, options: ExtractOptions = {}) {
   const delimiters = detectDelimiter(content);
   if (!delimiters) {
     return null;
@@ -66,5 +72,12 @@ export function extract(content: string) {
       matchStop.index! + (includeDelimiter ? matchStop[0].length : 0);
     extracted.push(content.substring(indexStart, indexStop));
   }
-  return extracted.join("\n");
+  let joined = extracted.join("\n");
+  if (options.excludeNonTagComment) {
+    joined = joined
+      .replace(/^\s*?--.*?--$/gm, "")
+      .replace(/^\s*?--.*?$/gm, "")
+      .replace(/--\s*?[abd-mo-z].+?$/gim, "");
+  }
+  return joined;
 }
