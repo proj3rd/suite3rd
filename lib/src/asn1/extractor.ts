@@ -75,9 +75,16 @@ export function extract(content: string, options: ExtractOptions = {}) {
   let joined = extracted.join("\n");
   if (options.excludeNonTagComment) {
     joined = joined
-      .replace(/^\s*?--.*?--$/gm, "")
+      .replace(/^\s*?--.*?--/gm, "")
       .replace(/^\s*?--.*?$/gm, "")
-      .replace(/--\s*?[abd-mo-z].+?$/gim, "");
+      .replace(/^ \(.*?$/gm, "")
+      .replace(/--\s*?[abd-mo-z].+?$/gim, "")
+      .replace(/--\s*?c[a-np-z].+?$/gim, "")
+      .replace(/--\s*?co[a-mo-z].+?$/gim, "")
+      .replace(/--\s*?con[a-ce-z].+?$/gim, "")
+      .replace(/--\s*?n[a-df-z].+?$/gim, "")
+      .replace(/--\s*?ne[a-df-z].+?$/gim, "")
+      .replace(/--\s*?nee[a-ce-z].+?$/gim, "");
   }
   return joined;
 }
