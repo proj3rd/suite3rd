@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extract } from "../../lib/src/asn1/extractor";
+import { extract } from "../../src/asn1/extractor";
 
 describe("ASN.1 extractor", () => {
   it("Should extract ASN.1 definition with type 1 delimiter", () => {

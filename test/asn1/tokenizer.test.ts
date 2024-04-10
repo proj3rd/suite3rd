@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { tokenize } from "../../lib/src/asn1/tokenizer";
-import { TokenType } from "../../lib/src/asn1/tokenType";
+import { tokenize } from "../../src/asn1/tokenizer";
+import { TokenType } from "../../src/asn1/tokenType";
 
 describe("ASN.1 lexer", () => {
   it("Should tokenize ASN.1 definition", () => {

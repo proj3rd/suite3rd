@@ -13,7 +13,7 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js"],
     alias: {
-      "@lib": path.resolve(__dirname, "../../lib/src"),
+      "@lib": path.resolve(__dirname, "../../src"),
     },
   },
   plugins: [

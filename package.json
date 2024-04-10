@@ -1,23 +1,29 @@
 {
+  "name": "suite3rd",
   "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js"
+    }
+  },
   "scripts": {
     "build": "npm run build:esm && npm run build:doc",
-    "build:doc": "npx typedoc --cleanOutputDir lib/src/index.ts",
+    "build:doc": "npx typedoc --cleanOutputDir src/index.ts",
     "build:esm": "npx tsc --build --clean tsconfig.lib.json && npx tsc -p tsconfig.lib.json",
     "test": "npx vitest"
   },
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.11.30",
+    "basic-ftp": "^5.0.5",
+    "commander": "^12.0.0",
     "ts-loader": "^9.5.1",
     "typedoc": "^0.25.12",
     "typescript": "^5.2.2",
     "vitest": "^1.4.0",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
-  },
-  "dependencies": {
-    "basic-ftp": "^5.0.5",
-    "commander": "^12.0.0"
   }
 }

@@ -1,0 +1,6 @@
+.vscode/
+app/
+docs/
+src/
+test/
+tsconfig*
