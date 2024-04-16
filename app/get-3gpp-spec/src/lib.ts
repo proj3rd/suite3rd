@@ -73,23 +73,6 @@ export async function getSpec(spec: string, rel: string, quarter: string) {
 }
 
 /**
- * Get a release from version strnig
- * @param version String in a form of xyz or uvwxyz
- * @returns Release
- */
-function getRelease(version: string) {
-  if (version.length === 6) {
-    return Number(version.substring(0, 2));
-  }
-  const map = Object.fromEntries(
-    "123456789abcdefghijklmnopqrstuvwxyz"
-      .split("")
-      .map((char, index) => [char, index + 1])
-  );
-  return map[version[0]];
-}
-
-/**
  * Get a series number from spec string
  * @param spec String in a form of ab.cde[-f]
  * @returns Series number (zero padded, if required)
