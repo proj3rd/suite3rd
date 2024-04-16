@@ -1,4 +1,5 @@
 const path = require("path");
+const { BannerPlugin } = require("webpack");
 
 module.exports = {
   mode: "production",
@@ -12,6 +13,12 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js"],
   },
+  plugins: [
+    new BannerPlugin({
+      banner: "#!/usr/bin/env node",
+      raw: true,
+    }),
+  ],
   module: {
     rules: [
       {
