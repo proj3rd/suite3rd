@@ -1,5 +1,6 @@
 import { Client } from "basic-ftp";
 import { parse } from "path";
+import { parse as parseVersion } from "../../../src/3gpp/version";
 
 export const HOST = "ftp.3gpp.org";
 const WILD_CARD = "*";
@@ -20,8 +21,7 @@ export async function getSpec(spec: string, rel: string, quarter: string) {
     })
     .then((fileInfoList) => {
       return fileInfoList
-        .filter((fileInfo) => {
-          // Check release verison
+        .map((fileInfo) => {
           const { name } = parse(fileInfo.name);
           const indexHyphen = name.lastIndexOf("-");
           if (indexHyphen === -1) {
@@ -29,9 +29,22 @@ export async function getSpec(spec: string, rel: string, quarter: string) {
               "Spec must be in a form of AB.CDE[-F]-xyz or AB.CDE[-F]-uvwxyz"
             );
           }
-          const version = name.substring(indexHyphen + 1);
-          const release = getRelease(version);
-          if (rel !== WILD_CARD && release !== Number(rel)) {
+          const versionString = name.substring(indexHyphen + 1);
+          const version = parseVersion(versionString);
+          return {
+            path,
+            ...fileInfo,
+            date: parseDate(fileInfo.rawModifiedAt),
+            version,
+          };
+        })
+        .filter((fileInfo) => {
+          if (rel === "latest") {
+            return true;
+          }
+          const { version } = fileInfo;
+          // Check release verison
+          if (rel !== WILD_CARD && version === undefined) {
             return false;
           }
           // Check date
@@ -44,12 +57,14 @@ export async function getSpec(spec: string, rel: string, quarter: string) {
           const dateQuarterPlus3Months = new Date(yy, mm + 2).getTime();
           return date >= dateQuarter && date < dateQuarterPlus3Months;
         })
-        .map((fileInfo) => ({
-          path,
-          ...fileInfo,
-          date: parseDate(fileInfo.rawModifiedAt),
-        }))
         .sort((a, b) => {
+          const versionA = a.version!;
+          const versionB = b.version!;
+          for (let i = 0; i < 3; i++) {
+            if (versionA[i] !== versionB[i]) {
+              return versionB[i] - versionA[i];
+            }
+          }
           return b.date.getTime() - a.date.getTime();
         });
     })

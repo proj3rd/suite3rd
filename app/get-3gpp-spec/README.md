@@ -5,6 +5,12 @@ A command line tool to download a 3GPP spec
 ## Usage
 
 ```sh
+npx get-3gpp-spec <spec number> latest
+```
+
+Download the latest (with the highest version) spec of the given spec number
+
+```sh
 npx get-3gpp-spec <spec number> <release> <yyyy-mm>
 ```
 

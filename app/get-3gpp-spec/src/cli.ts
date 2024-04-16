@@ -13,13 +13,13 @@ let latest: { path: string; name: string; date: Date };
 getSpec(spec, rel, quarter)
   .then((fileInfoList) => {
     if (rel === WILD_CARD || quarter === WILD_CARD) {
-      console.table(fileInfoList, ["path", "name", "date", "size"]);
+      console.table(fileInfoList, ["path", "name", "version", "date", "size"]);
       return;
     }
-    latest = fileInfoList[0];
-    if (!latest) {
+    if (!fileInfoList.length) {
       throw Error("The requested spec not found");
     }
+    latest = fileInfoList[0];
     client = new Client();
     return client.access({ host: HOST });
   })
