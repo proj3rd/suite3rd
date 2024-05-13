@@ -1,6 +1,7 @@
 import { Client } from "basic-ftp";
 import { parse } from "path";
-import { parse as parseVersion } from "../../../src/3gpp/version";
+import { version } from "./";
+const { parse: parseVersion } = version;
 
 export const HOST = "ftp.3gpp.org";
 const WILD_CARD = "*";

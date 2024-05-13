@@ -19,8 +19,5 @@
   "bugs": {
     "url": "https://github.com/proj3rd/suite3rd/issues"
   },
-  "homepage": "https://github.com/proj3rd/suite3rd/blob/main/app/get-3gpp-spec#readme",
-  "devDependencies": {
-    "basic-ftp": "^5.0.5"
-  }
+  "homepage": "https://github.com/proj3rd/suite3rd/blob/main/app/get-3gpp-spec#readme"
 }

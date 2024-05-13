@@ -3,7 +3,7 @@
 import { Client } from "basic-ftp";
 import { resolve } from "path";
 import { argv, cwd } from "process";
-import { HOST, getSpec } from "./lib";
+import { HOST, getSpec } from "@lib/3gpp/repo";
 
 const WILD_CARD = "*";
 
