@@ -13,6 +13,11 @@ export async function parse(bin: Buffer) {
   const wordDocument = await getFileContent(zip, "word/document.xml");
   const $doc = load(wordDocument, { xml: true });
   const wBody = $doc(SELECTOR_W_BODY)[0];
+  if (!wBody) {
+    return Promise.reject(
+      "This document does not look like a valid docx document (missing w:body)"
+    );
+  }
 
   const wordStyles = await getFileContent(zip, "word/styles.xml");
   const $styles = load(wordStyles, { xml: true });
