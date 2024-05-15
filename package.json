@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "npm run build:esm && npm run build:doc",
-    "build:doc": "npx typedoc --cleanOutputDir src/index.ts",
+    "build:doc": "npx typedoc --cleanOutputDir --tsconfig tsconfig.lib.json src/index.ts",
     "build:esm": "npx tsc --build --clean tsconfig.lib.json && npx tsc -p tsconfig.lib.json",
     "test": "npx vitest"
   },
