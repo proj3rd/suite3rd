@@ -1,1 +1,2 @@
-export { parse } from "./version.js";
+export * as version from "./version.js";
+export * as repo from "./repo.js";
