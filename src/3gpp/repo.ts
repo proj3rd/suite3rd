@@ -43,9 +43,15 @@ export async function getSpec(spec: string, rel: string, quarter: string) {
           if (rel === "latest") {
             return true;
           }
+          if (rel === WILD_CARD) {
+            return true;
+          }
           const { version } = fileInfo;
+          if (!version) {
+            return false;
+          }
           // Check release verison
-          if (rel !== WILD_CARD && version === undefined) {
+          if (+rel !== version[0]) {
             return false;
           }
           // Check date
