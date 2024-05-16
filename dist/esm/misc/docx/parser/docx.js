@@ -17,9 +17,9 @@ export function getFileContent(doc, path) {
     return __awaiter(this, void 0, void 0, function* () {
         const file = doc.file(path);
         if (!file) {
-            return Promise.reject(new Error("file not found"));
+            return Promise.reject(new Error('file not found'));
         }
-        const data = yield file.async("uint8array");
+        const data = yield file.async('uint8array');
         const decoded = new TextDecoder().decode(data);
         return Promise.resolve(decoded);
     });
