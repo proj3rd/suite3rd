@@ -1,4 +1,4 @@
-import { parse as parseDocx } from "../../../misc/docx";
+import { parse as parseDocx } from "../../../misc/docx/index.js";
 import { Cell } from "../../../misc/docx/parser/elements/cell.js";
 import { Paragraph } from "../../../misc/docx/parser/elements/paragraph.js";
 import { Row } from "../../../misc/docx/parser/elements/row.js";
@@ -10,7 +10,7 @@ import {
   IDefinition,
   IInformationElement,
   IRangeBound,
-} from "./types";
+} from "./types.js";
 
 const columnListConditionTable = ["Condition", "Explanation"];
 const columnListDefinitionTable = [
@@ -76,7 +76,7 @@ function matchColumnsPerRow(row: Row, columnList: string[]): boolean {
 }
 
 function matchColumns(table: Table, columnList: string[]): boolean {
-  const headerRow = table.rows[0];
+  const headerRow = table.rows[0]!;
   return matchColumnsPerRow(headerRow, columnList);
 }
 
@@ -125,7 +125,7 @@ function getSectionInfo(
     return undefined;
   }
   const { sectionNumber, title } = matchResult.groups;
-  return { sectionNumber, title };
+  return { sectionNumber: sectionNumber!, title: title! };
 }
 
 function newDefinition(): IDefinition {
@@ -236,7 +236,9 @@ function parseDefinitionTable(table: Table): {
     const name = tdFirst.replace(/^>+/, "").trim();
     const matchResult = tdFirst.match(reDepth);
     const depth =
-      !matchResult || !matchResult.groups ? 0 : matchResult.groups.depth.length;
+      !matchResult || !matchResult.groups
+        ? 0
+        : matchResult.groups.depth!.length;
     depthMin = Math.min(depthMin, depth);
     const typeAndRef = normalizeHtmlText(cellText(cells[i + 2]));
     const [reference, type] = typeAndRef.match(reSectionNumber)

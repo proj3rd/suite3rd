@@ -1,5 +1,4 @@
-import { IRangeBound } from "../types";
-import { HEADER_DESCRIPTION, HEADER_NAME_BASE } from "./definition";
+import { IRangeBound } from "../types.js";
 
 export class RangeBounds {
   public rangeBoundList: IRangeBound[];

@@ -21,27 +21,27 @@ function canMerge(parent: IInformationElement, child: Definition): boolean {
     parent.presence !== "" &&
     parent.presence !== "M" &&
     parent.presence !== "O" &&
-    firstElement.presence !== "" &&
-    firstElement.presence !== "M" &&
-    firstElement.presence !== "O" &&
-    parent.presence !== firstElement.presence
+    firstElement?.presence !== "" &&
+    firstElement?.presence !== "M" &&
+    firstElement?.presence !== "O" &&
+    parent.presence !== firstElement?.presence
   ) {
     return false;
   }
-  if (parent.range !== "" || firstElement.range !== "") {
+  if (parent.range !== "" || firstElement?.range !== "") {
     return false;
   }
   if (
     parent.criticality !== "" &&
-    firstElement.criticality !== "" &&
-    parent.criticality !== firstElement.criticality
+    firstElement?.criticality !== "" &&
+    parent.criticality !== firstElement?.criticality
   ) {
     return false;
   }
   if (
     parent.assignedCriticality !== "" &&
-    firstElement.assignedCriticality !== "" &&
-    parent.assignedCriticality !== firstElement.assignedCriticality
+    firstElement?.assignedCriticality !== "" &&
+    parent.assignedCriticality !== firstElement?.assignedCriticality
   ) {
     return false;
   }
@@ -159,7 +159,7 @@ export class Definition {
     const conditionsExpanded = cloneDeep(this.conditions);
     // tslint:disable-next-line: prefer-for-of
     for (let i = elementListExpanded.length - 1; i >= 0; i -= 1) {
-      const element = elementListExpanded[i];
+      const element = elementListExpanded[i]!;
       const { reference } = element;
       const matchResult = reference.match(reSectionNumber);
       if (matchResult) {
@@ -173,12 +173,12 @@ export class Definition {
             rangeBounds: rangeBoundsReferenced,
             conditions: conditionsReferenced,
           } = definitionExpanded;
-          if (canMerge(elementListExpanded[i], definitionExpanded)) {
+          if (canMerge(elementListExpanded[i]!, definitionExpanded)) {
             elementListReferenced.forEach((elementReferenced) => {
               // eslint-disable-next-line no-param-reassign
               elementReferenced.depth += element.depth;
             });
-            merge(elementListExpanded[i], elementListReferenced[0]);
+            merge(elementListExpanded[i]!, elementListReferenced[0]!);
             elementListExpanded.splice(
               i + 1,
               0,

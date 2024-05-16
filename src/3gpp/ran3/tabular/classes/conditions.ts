@@ -1,4 +1,4 @@
-import { ICondition } from "../types";
+import { ICondition } from "../types.js";
 
 export class Conditions {
   public conditionList: ICondition[];
