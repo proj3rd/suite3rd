@@ -37,7 +37,7 @@ function detectDelimiter(content: string) {
   return undefined;
 }
 
-type ExtractOptions = {
+export type ExtractOptions = {
   excludeNonTagComment?: boolean;
 };
 
