@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { parse as parseDocx } from "../../../misc/docx/index.js";
-import { Paragraph } from "../../../misc/docx/parser/elements/paragraph.js";
-import { Table } from "../../../misc/docx/parser/elements/table.js";
+import { Paragraph } from "../../../misc/docx/elements/paragraph.js";
+import { Table } from "../../../misc/docx/elements/table.js";
 import { Definition } from "./classes/definition.js";
 import { Definitions } from "./classes/definitions.js";
 const columnListConditionTable = ["Condition", "Explanation"];

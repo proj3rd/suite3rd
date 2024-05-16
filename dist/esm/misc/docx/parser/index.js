@@ -11,8 +11,8 @@ import { load } from "cheerio";
 import jszip from "jszip";
 const { loadAsync } = jszip;
 import { getFileContent } from "./docx.js";
-import { Paragraph } from "./elements/paragraph.js";
-import { Table } from "./elements/table.js";
+import { Paragraph } from "../elements/paragraph.js";
+import { Table } from "../elements/table.js";
 const SELECTOR_W_BODY = "w\\:body";
 export function parse(bin) {
     return __awaiter(this, void 0, void 0, function* () {
