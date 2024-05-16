@@ -34,7 +34,7 @@ export class Paragraph {
         if (!pPr) {
             return undefined;
         }
-        const outlineLevel = Paragraph.getOutlineLevelFromNode(pPr.cloneNode(true).cloneNode(true));
+        const outlineLevel = Paragraph.getOutlineLevelFromNode(pPr.cloneNode(true));
         if (outlineLevel) {
             return outlineLevel;
         }
