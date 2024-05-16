@@ -7,7 +7,7 @@ import {
   TAG_NAME_NO_BREAK_HYPHEN,
   TAG_NAME_TAB,
   TAG_NAME_TEXT,
-} from "../utils.js";
+} from "../parser/utils.js";
 
 export const TAG_NAME_RUN = "w:r";
 
