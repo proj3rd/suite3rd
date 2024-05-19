@@ -1,16 +1,16 @@
 import { compare } from "../../../3gpp/version.js";
 import { TestCase } from "./testCase.js";
 
-const SPEC_NUM = "38413";
+const SPEC_NUM = "38423";
 
 export const testCases: TestCase[] = [
   (definitions, specNum, version) => {
-    // Handover Cause IE in HO Report message (9.3.3.39) should point Cause IE (9.3.1.2)
-    const VERSION: [number, number, number] = [16, 2, 0];
-    const CLAUSE = "9.3.3.39";
-    const IE_NAME = "Handover Cause";
-    const PATTERN_TO_TEST = /\b9\.3\.1\.2\b/;
-    const REPLACEMENT = "9.3.1.2";
+    // SN UL PDCP UP TNL Information IE of PDU Session Resource Setup Response Info (9.2.1.6) should point 9.2.3.76
+    const VERSION: [number, number, number] = [15, 2, 0];
+    const CLAUSE = "9.2.1.6";
+    const IE_NAME = "SN UL PDCP UP TNL Information";
+    const PATTERN_TO_TEST = /\b9\.2\.3\.76\b/;
+    const REPLACEMENT = "9.2.3.76";
     if (specNum !== SPEC_NUM) {
       return;
     }
@@ -28,7 +28,7 @@ export const testCases: TestCase[] = [
     );
     if (!element) {
       throw Error(
-        `${IE_NAME} IE is not found in clause ${CLAUSE} of ${specNum} ${version.join(
+        `${IE_NAME}} IE is not found in clause ${CLAUSE} of ${specNum} ${version.join(
           "."
         )}`
       );
