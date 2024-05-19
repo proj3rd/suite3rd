@@ -36,7 +36,7 @@ export const testCases: TestCase[] = [
     if (!element.reference.match(PATTERN_TO_TEST)) {
       element.reference = REPLACEMENT;
       console.info(
-        `Reference of ${IE_NAME} IE in clause ${CLAUSE} of of ${specNum} ${version.join(
+        `Reference of ${IE_NAME} IE in clause ${CLAUSE} of ${specNum} ${version.join(
           "."
         )} has been replace with ${REPLACEMENT}`
       );
