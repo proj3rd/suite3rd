@@ -30,6 +30,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "jszip": "^3.10.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "yang-js": "^0.24.70"
   }
 }
