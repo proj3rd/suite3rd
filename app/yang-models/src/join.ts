@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from "fs";
+import { readFileSync, readdirSync, writeFileSync } from "fs";
 import Topo from "@hapi/topo";
 import Yang from "yang-js";
 
@@ -32,12 +32,10 @@ yangFiles.forEach((file) => {
     after: imports.map((imp) => imp[0]) as string[],
   });
 });
-console.log(sortedModules.nodes);
 
 const textList: string[] = [];
 sortedModules.nodes.forEach((node) => {
   const content = readFileSync(node, "utf8");
   textList.push(content);
 });
-const model = new (Yang as any)(textList.join("\n\n"));
-console.log(model.toString());
+writeFileSync("3gpp.yang", textList.join("\n"));

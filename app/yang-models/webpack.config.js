@@ -5,7 +5,7 @@ module.exports = {
   mode: "production",
   entry: {
     fetch: "./src/fetch.ts",
-    parse: "./src/parse.ts",
+    join: "./src/join.ts",
   },
   target: "node",
   output: {
