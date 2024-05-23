@@ -28,6 +28,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@hapi/topo": "^6.0.2",
     "cheerio": "^1.0.0-rc.12",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
