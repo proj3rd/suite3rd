@@ -9,6 +9,8 @@
     }
   },
   "scripts": {
+    "grammar": "java -Xmx500M org.antlr.v4.Tool -Dlanguage=TypeScript src/asn1/grammar/asn1.g4 # FIXME: Can't use antlr4 alias",
+    "check": "tsc --noEmit -p tsconfig.lib.json",
     "build": "npm run build:esm && npm run build:doc",
     "build:doc": "npx typedoc --cleanOutputDir --tsconfig tsconfig.lib.json src/index.ts",
     "build:esm": "npx tsc --build --clean tsconfig.lib.json && npx tsc -p tsconfig.lib.json",
